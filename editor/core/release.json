@@ -1,6 +1,6 @@
 {
   "system": "astro-frontend-editor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "integrationVersion": 1,
   "dataSchema": 2,
   "minimumDataSchema": 1,

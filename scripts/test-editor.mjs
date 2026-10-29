@@ -1,18 +1,16 @@
 import {chromium} from 'playwright';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import {createHash,randomBytes} from 'node:crypto';
 const base=process.env.EDITOR_TEST_URL||'http://127.0.0.1:8766';
 if(!/^http:\/\/(127\.0\.0\.1|localhost):\d+(?:\/[a-z0-9-]+)*$/.test(base))throw Error('Tests only run against local fixtures');
 const prefix=new URL(base).pathname.replace(/\/$/,'');
 await fs.mkdir('.editor-tools',{recursive:true});
 const state='dist/site-editor/storage/state.php',bootstrap='dist/site-editor/bootstrap.php';
 const saved=await Promise.all([state,bootstrap].map(p=>fs.readFile(p).catch(e=>{if(e.code==='ENOENT')return null;throw e})));
-const key=randomBytes(24).toString('hex');
 const createdUploads=[];
 let browser;
 try{
- await fs.rm(state,{force:true});await fs.writeFile(bootstrap,"<?php return '"+createHash('sha256').update(key).digest('hex')+"';");
+ await fs.rm(state,{force:true});await fs.rm(bootstrap,{force:true});
  browser=await chromium.launch({headless:true});const context=await browser.newContext();const page=await context.newPage();
  const errors=[];const escaped=[];page.on('request',r=>{const u=new URL(r.url());if(prefix&&u.origin===new URL(base).origin&&u.pathname!==prefix&&!u.pathname.startsWith(prefix+'/'))escaped.push(u.pathname);});page.on('pageerror',e=>errors.push(e.message));
  await page.goto(base);await assert.equal(await page.locator('h1').innerText(),'Gemeinsam wird aus Ihrer Idee etwas Gutes.');
@@ -20,8 +18,10 @@ try{
  const api=async data=>{const r=await context.request.post(base+'/site-editor/api.php',{data});return {status:r.status(),body:await r.json()}};
  const get=async()=>await(await context.request.get(base+'/site-editor/api.php')).json();
  let s=await get();assert.equal(s.setup,true);
- assert.equal((await api({action:'setup',key,password:'Test-only-password-2026',csrf:'invalid'})).status,403);
- assert.equal((await api({action:'setup',key,password:'Test-only-password-2026',csrf:s.csrf})).status,200);
+ assert.equal((await api({action:'setup',password:'a',csrf:'invalid'})).status,403);
+ await page.goto(base+'/site-editor/');await page.locator('#admin-login').waitFor({state:'visible'});assert.equal(await page.locator('input[name="key"]').count(),0);
+ await page.locator('input[name="password"]').fill('a');await page.locator('input[name="confirm"]').fill('a');await page.locator('#admin-login button').click();await page.locator('#admin-ready').waitFor({state:'visible'});await page.goto(base);
+ assert.equal((await api({action:'setup',password:'z',csrf:(await get()).csrf})).status,401);
  s=await get();assert.equal(s.authenticated,true);assert.equal(s.pages.length,6);
  const publish=async data=>{s=await get();const r=await api({action:'publish',revision:s.revision,csrf:s.csrf,...data});assert.equal(r.status,200,JSON.stringify(r));return r};
  await page.reload();assert.ok(await page.locator('script[src*="editor.js"]').count());
@@ -51,9 +51,13 @@ try{
  await publish({scope:'pages',pages:pages.slice(0,-1)});assert.equal((await page.goto(base+'/testseite/')).status(),404);
  s=await get();assert.equal((await api({action:'restore',csrf:s.csrf,revision:s.revision})).status,200);assert.equal((await page.goto(base+'/testseite/')).status(),200);
  s=await get();assert.equal((await api({action:'logout',csrf:s.csrf})).status,200);assert.equal((await get()).authenticated,false);
- await page.goto(base+'/site-editor/');await page.locator('#admin-login input[name="password"]').fill('Test-only-password-2026');await page.locator('#admin-login button').click();await page.locator('#admin-ready').waitFor({state:'visible'});
+ await page.goto(base+'/site-editor/');await page.locator('#admin-login input[name="password"]').fill('a');await page.locator('#admin-login button').click();await page.locator('#admin-ready').waitFor({state:'visible'});
  const downloadPromise=page.waitForEvent('download');await page.locator('#admin-export').click();const download=await downloadPromise;assert.match(download.suggestedFilename(),/json$/);
- s=await get();assert.equal((await api({action:'password',csrf:s.csrf,current:'Test-only-password-2026',password:'Changed-test-password-2026'})).status,200);
+ s=await get();assert.equal((await api({action:'password',csrf:s.csrf,current:'a',password:'b'})).status,200);
+ s=await get();await api({action:'logout',csrf:s.csrf});
+ s=await get();assert.equal((await api({action:'login',csrf:s.csrf,password:'b'})).status,200);
+ s=await get();const longPassword='ä'.repeat(200);assert.equal((await api({action:'password',csrf:s.csrf,current:'b',password:longPassword})).status,200);
+ s=await get();await api({action:'logout',csrf:s.csrf});s=await get();assert.equal((await api({action:'login',csrf:s.csrf,password:longPassword})).status,200);
  s=await get();await api({action:'logout',csrf:s.csrf});
  await page.goto(base);await page.setViewportSize({width:390,height:844});await page.screenshot({path:'.editor-tools/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.locator('.mobile-nav summary').click();assert.ok(await page.locator('.mobile-nav nav a[href="'+prefix+'/kontakt/"]').isVisible());

@@ -40,8 +40,8 @@ try{
  }
  await snapshot();await fs.writeFile(path.join(backup,'backup-manifest.json'),JSON.stringify(previous,null,2));
  const files=[];
- async function collect(dir=''){for(const e of await fs.readdir(path.join('dist',dir),{withFileTypes:true})){const rel=dir+e.name;if(e.isSymbolicLink())throw Error('Symlinks not supported');if(/^site-editor\/(storage|uploads)\//.test(rel)&&!rel.endsWith('/.htaccess'))continue;if(rel==='site-editor/bootstrap.php'&&options.mode==='update')continue;if(e.isDirectory())await collect(rel+'/');else files.push({p:path.resolve('dist',rel),rel});}}
- await collect();if(options.mode==='install'&&!files.some(f=>f.rel==='site-editor/bootstrap.php'))throw Error('Run editor:setup and rebuild before installation');
+ async function collect(dir=''){for(const e of await fs.readdir(path.join('dist',dir),{withFileTypes:true})){const rel=dir+e.name;if(e.isSymbolicLink())throw Error('Symlinks not supported');if(/^site-editor\/(storage|uploads)\//.test(rel)&&!rel.endsWith('/.htaccess'))continue;if(rel==='site-editor/bootstrap.php')continue;if(e.isDirectory())await collect(rel+'/');else files.push({p:path.resolve('dist',rel),rel});}}
+ await collect();
  const client={ensureDir:async dir=>{await ftp.ensureDir(root+dir)},cd:async()=>ftp.cd(root||'/'),uploadFrom:async(src,rel)=>ftp.uploadFrom(src,target(rel)),remove:async rel=>ftp.remove(target(rel))};
  const verification=await publishTransaction({client,files,previous,backup,remote,hash});
  await fs.writeFile(path.join(backup,'published-manifest.json'),JSON.stringify({siteId:site.id,origin:site.origin,verification},null,2));

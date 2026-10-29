@@ -38,18 +38,12 @@ Der PHP-Entwicklungsserver ist ausschließlich für lokale Tests gedacht.
 
 ## Editor erstmalig einrichten
 
-```sh
-npm run editor:setup
-npm run build
-```
-
-Der erste Befehl gibt einen zufälligen Einrichtungsschlüssel aus. Sicher
-aufbewahren: Lokal wird nur dessen SHA-256-Hash in der ignorierten Datei
-`public/site-editor/bootstrap.php` gespeichert. Bestehende Dateien werden nicht
-überschrieben. Nach Installation `/site-editor/` öffnen und mit dem Schlüssel
-ein Adminpasswort setzen (mindestens 14 Zeichen, maximal 72 UTF-8-Bytes).
-Der Schlüssel kann nach der Einrichtung keine neue Anmeldung ersetzen.
-Bootstrap-Dateien danach lokal und auf dem Server entfernen.
+Nach der Installation /site-editor/ öffnen und beim ersten Aufruf ein eigenes
+Adminpasswort zweimal eingeben. Bei Unterpfaden entsprechend darunter öffnen.
+Ein Einrichtungsschlüssel ist nicht erforderlich. Es gibt keine Mindestlänge,
+Zeichenklassen oder vorgegebene Maximallänge. Ein nicht leeres Passwort ist nötig.
+Auch ein einzelnes Zeichen wird akzeptiert. Dasselbe gilt für Passwortwechsel.
+Bestehende Adminzugänge bleiben bei technischen Updates erhalten.
 
 Im Stiftmodus lassen sich Texte, Textrollen, globale und individuelle Stile,
 Bilder, Logo und Links bearbeiten. Die Verwaltung bietet unabhängige Haupt-
@@ -76,7 +70,7 @@ Codex übergibt echte Zugangsdaten ausschließlich über stdin, niemals in
 Befehlsargumenten oder versionierten Dateien. Unterstützt wird explizites FTPS
 mit Zertifikatsprüfung. `probe` prüft Verbindung und Installationskennung;
 `install` erfordert ein leeres, ausschließlich dieser Website zugeordnetes
-Verzeichnis und einen Build mit Einrichtungsschlüssel. `update` erfordert eine
+Verzeichnis und einen fertigen Build. `update` erfordert eine
 passende vorhandene Installation. Bei Installation/Update bestätigt eine
 kurzlebige PHP-Prüfdatei die Domainzuordnung und PHP-Ausführung über HTTPS.
 
@@ -93,7 +87,7 @@ ersetzen weder FTPS-Zugang noch die Prüfung der Apache-Konfiguration.
 
 ## Gemeinsamer Core und Updates
 
-`editor/core/` ist der versionierte gemeinsame Core (1.1.0, Datenformat 2,
+`editor/core/` ist der versionierte gemeinsame Core (1.2.0, Datenformat 2,
 Integration 1). `editor/core.lock.json` fixiert dessen geprüfte Prüfsummen.
 Websitegestaltung und Inhalte liegen außerhalb des Cores. Neue Core-Releases
 müssen ihre Version erhöhen und Migrationen erhalten.
@@ -139,7 +133,7 @@ privaten Websitequellen, Daten, Uploads oder Zugangsdaten auf dem Webspace erzeu
 ## Installation unter einem Unterpfad
 
 Optional `basePath` in `site.config.json` setzen, zum Beispiel `/codex` (ohne
-abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.1.0
+abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.2.0
 unterstützt die bisherige Domainwurzel weiter unverändert; Datenformat 2 und
 Integration 1 bleiben kompatibel. Seitenadressen in Inhaltsdaten bleiben relativ
 zur Installation. Für eine lokale, nicht versionierte Hostingkonfiguration kann

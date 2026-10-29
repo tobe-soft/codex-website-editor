@@ -23,6 +23,9 @@ function editor_session(): void {
     session_name(editor_config()['sessionName']); session_set_cookie_params(['lifetime'=>0,'path'=>editor_url('/'),'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']); session_start();
     $_SESSION['csrf'] ??= bin2hex(random_bytes(32));
 }
+// Prehashing avoids bcrypt's 72-byte input limit; legacy password records remain valid.
+function editor_password_record(string $password): array {return ['hash'=>password_hash(hash('sha256',$password),PASSWORD_DEFAULT),'prehash'=>'sha256','epoch'=>bin2hex(random_bytes(24))];}
+function editor_verify_password(string $password,array $admin): bool {return password_verify(($admin['prehash']??null)==='sha256'?hash('sha256',$password):$password,$admin['hash']);}
 function editor_authenticated(array $state): bool {
     return isset($_SESSION['epoch'],$state['admin']['epoch']) && hash_equals($state['admin']['epoch'],$_SESSION['epoch']) && time()-($_SESSION['active']??0)<1800 && time()-($_SESSION['started']??0)<28800;
 }

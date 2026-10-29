@@ -32,23 +32,21 @@ try {
   $ip=hash('sha256',$_SERVER['REMOTE_ADDR']??'unknown'); $attempt=$state['attempts'][$ip]??['count'=>0,'time'=>time()];
   if(time()-$attempt['time']>900)$attempt=['count'=>0,'time'=>time()];
   if($attempt['count']>=8)respond(429,['error'=>'Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.']);
-  $password=$input['password']??''; if(!is_string($password)||strlen($password)>72)respond(422,['error'=>'Passwort ist ungültig (maximal 72 Bytes).']);
+  $password=$input['password']??''; if(!is_string($password)||$password==='')respond(422,['error'=>'Bitte ein Passwort eingeben.']);
   if($action==='setup'){
-   $bootstrap=is_file(__DIR__.'/bootstrap.php')?require __DIR__.'/bootstrap.php':null;
-   $valid=empty($state['admin'])&&is_string($bootstrap)&&hash_equals($bootstrap,hash('sha256',(string)($input['key']??'')));
-   if($valid&&strlen($password)<14)respond(422,['error'=>'Bitte mindestens 14 Zeichen verwenden.']);
-  }else $valid=!empty($state['admin'])&&password_verify($password,$state['admin']['hash']);
+   $valid=empty($state['admin']);
+  }else $valid=!empty($state['admin'])&&editor_verify_password($password,$state['admin']);
   if(!$valid){$attempt['count']++;$state['attempts'][$ip]=$attempt;editor_write($state);respond(401,['error'=>'Anmeldung nicht möglich. Zugangsdaten prüfen.']);}
-  if($action==='setup')$state['admin']=['hash'=>password_hash($password,PASSWORD_DEFAULT),'epoch'=>bin2hex(random_bytes(24))];
+  if($action==='setup')$state['admin']=editor_password_record($password);
   $state['attempts']=array_filter($state['attempts'],fn($a)=>time()-$a['time']<900);unset($state['attempts'][$ip]);editor_write($state);
   session_regenerate_id(true); $_SESSION['epoch']=$state['admin']['epoch'];$_SESSION['started']=$_SESSION['active']=time();$_SESSION['csrf']=bin2hex(random_bytes(32));respond(200,['ok'=>true]);
  }
  if(!editor_authenticated($state))respond(401,['error'=>'Bitte erneut anmelden.']); $_SESSION['active']=time();
  if($action==='logout'){$_SESSION=[];session_destroy();setcookie(session_name(),'', ['expires'=>time()-3600,'path'=>editor_url('/'),'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']);respond(200,['ok'=>true]);}
  if($action==='password'){
-  if(!password_verify((string)($input['current']??''),$state['admin']['hash']))respond(422,['error'=>'Bisheriges Passwort stimmt nicht.']);
-  $password=$input['password']??'';if(!is_string($password)||strlen($password)<14||strlen($password)>72)respond(422,['error'=>'Neues Passwort: 14 Zeichen bis maximal 72 Bytes.']);
-  $state['admin']=['hash'=>password_hash($password,PASSWORD_DEFAULT),'epoch'=>bin2hex(random_bytes(24))];editor_write($state);$_SESSION['epoch']=$state['admin']['epoch'];session_regenerate_id(true);respond(200,['ok'=>true]);
+  if(!editor_verify_password((string)($input['current']??''),$state['admin']))respond(422,['error'=>'Bisheriges Passwort stimmt nicht.']);
+  $password=$input['password']??'';if(!is_string($password)||$password==='')respond(422,['error'=>'Bitte ein Passwort eingeben.']);
+  $state['admin']=editor_password_record($password);editor_write($state);$_SESSION['epoch']=$state['admin']['epoch'];session_regenerate_id(true);respond(200,['ok'=>true]);
  }
  if(!in_array($action,['publish','restore'],true))respond(422,['error'=>'Unbekannte Aktion.']);
  if(($input['revision']??null)!==$state['revision'])respond(409,['error'=>'Inzwischen wurde eine andere Änderung veröffentlicht. Seite neu laden.']);

@@ -1,5 +1,12 @@
 # Änderungen
 
+## 0.3.0 – 29.10.2026
+
+- Core 1.2.0: Adminpasswort direkt beim ersten Aufruf festlegen, ohne Schlüssel.
+- Keine Mindestlänge oder Zeichenregeln; kurze und lange Passwörter möglich.
+- Bestehende Passwort-Hashes und Adminzugänge bleiben kompatibel.
+
+
 ## 0.2.0 – 29.10.2026
 
 - Core 1.1.0 unterstützt optionale Unterpfade; bestehende Root-Installationen
