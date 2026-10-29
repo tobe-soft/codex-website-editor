@@ -1,0 +1,7 @@
+{
+  "id": "example-site",
+  "name": "Beispielwebsite",
+  "origin": "https://example.invalid",
+  "language": "de-DE",
+  "sessionName": "website_editor"
+}

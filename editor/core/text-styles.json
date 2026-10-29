@@ -1,0 +1,67 @@
+{
+  "h1": {
+    "label": "H1 – Hauptüberschrift",
+    "example": "Eine klare Hauptüberschrift.",
+    "description": "Die wichtigste Überschrift einer Seite."
+  },
+  "h2": {
+    "label": "H2 – Abschnittsüberschrift",
+    "example": "Ein neuer Abschnitt.",
+    "description": "Überschriften der Hauptabschnitte."
+  },
+  "h3": {
+    "label": "H3 – Unterüberschrift",
+    "example": "Ein Thema im Detail.",
+    "description": "Unterabschnitte und Kartenüberschriften."
+  },
+  "h4": {
+    "label": "H4 – Weitere Unterüberschrift",
+    "example": "Ein weiterer Unterabschnitt.",
+    "description": "Vierte Überschriftenebene; für spätere Inhalte vorbereitet."
+  },
+  "h5": {
+    "label": "H5 – Weitere Unterüberschrift",
+    "example": "Eine zusätzliche Gliederung.",
+    "description": "Fünfte Überschriftenebene; für spätere Inhalte vorbereitet."
+  },
+  "h6": {
+    "label": "H6 – Weitere Unterüberschrift",
+    "example": "Die kleinste Gliederungsebene.",
+    "description": "Sechste Überschriftenebene; für spätere Inhalte vorbereitet."
+  },
+  "p": {
+    "label": "Fließtext / Absätze",
+    "example": "Persönliche Unterstützung für Ihre Technik und Ihren Alltag.",
+    "description": "Absätze, Erläuterungen und Textteile innerhalb von Absätzen."
+  },
+  "li": {
+    "label": "Listenpunkte",
+    "example": "Ein verständlicher Punkt Ihrer Leistungsübersicht.",
+    "description": "Vorteile und Punkte in Leistungslisten."
+  },
+  "a": {
+    "label": "Linktexte",
+    "example": "Mehr über unsere Leistungen erfahren",
+    "description": "Textlinks und Kontaktlinks. Die Zieladressen bleiben erhalten."
+  },
+  "nav": {
+    "label": "Navigation",
+    "example": "Leistungen · Über uns · Kontakt",
+    "description": "Menütexte auf Desktop und Mobilgeräten sowie die Fußnavigation."
+  },
+  "button": {
+    "label": "Schaltflächen / Aktionslinks",
+    "example": "Lassen Sie uns sprechen",
+    "description": "Hervorgehobene Aktions- und Downloadlinks der Website."
+  },
+  "label": {
+    "label": "Beschriftungen / Hinweise",
+    "example": "Persönliche Beratung · Faire Empfehlungen",
+    "description": "Hinweisleiste, kurze Vorüberschriften, Schrittbezeichnungen und FAQ-Fragen."
+  },
+  "small": {
+    "label": "Kleingedrucktes / Zusatztexte",
+    "example": "Firmenname · Standort",
+    "description": "Signaturen, ergänzende Grafikbeschriftungen und kleine Fußzeilentexte."
+  }
+}

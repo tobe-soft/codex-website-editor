@@ -1,0 +1,65 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "name": "Start",
+      "builtin": true,
+      "protected": true,
+      "showInMenu": true,
+      "showInFooter": false
+    },
+    {
+      "id": "about",
+      "path": "/ueber-uns/",
+      "name": "Über uns",
+      "builtin": true,
+      "protected": false,
+      "showInMenu": true,
+      "showInFooter": false
+    },
+    {
+      "id": "services",
+      "path": "/leistungen/",
+      "name": "Leistungen",
+      "builtin": true,
+      "protected": false,
+      "showInMenu": true,
+      "showInFooter": false
+    },
+    {
+      "id": "contact",
+      "path": "/kontakt/",
+      "name": "Kontakt",
+      "builtin": true,
+      "protected": false,
+      "showInMenu": true,
+      "showInFooter": false
+    },
+    {
+      "id": "legal",
+      "path": "/impressum/",
+      "name": "Impressum",
+      "builtin": true,
+      "protected": false,
+      "showInMenu": false,
+      "showInFooter": true
+    },
+    {
+      "id": "privacy",
+      "path": "/datenschutz/",
+      "name": "Datenschutz",
+      "builtin": true,
+      "protected": false,
+      "showInMenu": false,
+      "showInFooter": true
+    }
+  ],
+  "menu": {
+    "design": "plain",
+    "fontSize": 17,
+    "gap": 25,
+    "border": 1,
+    "radius": 10
+  }
+}

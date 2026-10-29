@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Editable from '../components/Editable.astro';
+---
+<Layout title="Kontakt"><section class="page-hero"><div class="container"><Editable id="kontakt.label" as="p" class="eyebrow">Kontakt</Editable><Editable id="kontakt.heading" as="h1">Lassen Sie uns ins Gespräch kommen.</Editable><Editable id="kontakt.intro" class="lead">Sie haben eine Frage oder eine Idee? Wir freuen uns darauf, Sie kennenzulernen.</Editable></div></section><section class="section"><div class="container prose"><Editable id="kontakt.body">Ersetzen Sie die folgenden Beispieldaten durch Ihre eigenen Kontaktdaten.</Editable><div class="contact-panel"><a data-edit-link="contact.email" href="mailto:hallo@example.invalid">hallo@example.invalid</a><Editable id="contact.address">Musterstraße 1 · 12345 Musterstadt</Editable></div></div></section></Layout>

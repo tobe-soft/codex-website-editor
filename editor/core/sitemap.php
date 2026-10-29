@@ -1,0 +1,2 @@
+<?php
+require __DIR__.'/runtime.php';header('Content-Type: application/xml; charset=utf-8');header('X-Content-Type-Options: nosniff');echo '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';foreach($editorState['pages'] as $page)if(empty($page['deleted']))echo '<url><loc>'.htmlspecialchars(editor_config()['origin'].$page['path'],ENT_XML1).'</loc></url>';echo '</urlset>';

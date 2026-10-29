@@ -1,0 +1,15 @@
+{
+  "system": "astro-frontend-editor",
+  "version": "1.0.0",
+  "integrationVersion": 1,
+  "dataSchema": 2,
+  "minimumDataSchema": 1,
+  "runtimeFiles": [
+    ".htaccess", "api.php", "editor.css", "editor.js", "index.php",
+    "media-runtime.php", "media.js", "navigation.js", "runtime.php",
+    "site-admin.js", "site-runtime.php", "site.php", "sitemap.php",
+    "text-styles.json", "upload.php", "migrations.php",
+    "storage/.htaccess", "uploads/.htaccess"
+  ],
+  "buildFiles": ["build.mjs", "config.mjs"]
+}

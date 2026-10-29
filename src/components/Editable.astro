@@ -1,0 +1,6 @@
+---
+import textStyles from '../../editor/core/text-styles.json';
+interface Props { textStyle?: keyof typeof textStyles; id: string; as?: 'h1'|'h2'|'h3'|'h4'|'h5'|'h6'|'p'|'span'|'small'|'li'; class?: string; style?: string; }
+const {id, textStyle, as: Tag = 'p', ...attrs} = Astro.props;
+---
+<Tag {...attrs} data-edit-id={id} data-edit-type={Tag} data-text-style={textStyle}><slot /></Tag>

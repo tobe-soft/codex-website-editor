@@ -1,0 +1,29 @@
+{
+  "system": "astro-frontend-editor",
+  "version": "1.0.0",
+  "dataSchema": 2,
+  "integrationVersion": 1,
+  "files": {
+    "release.json": "8b282fe66a7e070a4fe57173e96712b086816901a03d8dc528d7ad5ba0e275aa",
+    ".htaccess": "a7d43813d705f07141d37dec96fe46a726201c1dc3f7313b81ab9e31f49b1415",
+    "api.php": "89357ffdd1ff7cf14b65b6556e609ccef714bfa0e5099d0435e5eb84cc6478b6",
+    "editor.css": "1ddd660720004de2c27d552fbb260fcf642abcab1a3cb6edcf8ad2652b543249",
+    "editor.js": "0d2da6f39ad4cfb64aef4b1dba627dad5edfd7ef9daa4676a524e239c7f3e6ce",
+    "index.php": "037b3f2f9e5a32481dcac7572b98790d5dc96d307e3e68bed8577e672e556c73",
+    "media-runtime.php": "82b59f18bec7b23e53565c98788e11f627651d2b01d98d9367011c590299b2dc",
+    "media.js": "898232500dc6f6a91ba16c37944376d43040ca925752402ddde26bab718a7745",
+    "navigation.js": "9523b3e685bb99be920696ecdc0768d623ff7740a7554b0734144eeffe876212",
+    "runtime.php": "7cfb1bfc8e63b9bdf365f4db514e14b41ad9c9b53e2fdd77eead0d854c22cd52",
+    "site-admin.js": "8f1a90b02b5c1320d9791ba5ccd851b69ef9fa74872312feab63e2f9af0fc597",
+    "site-runtime.php": "ac205bab93f881880229aaef31904c29f11a5aa5fd1bac9c752a098d6f71c7d7",
+    "site.php": "75475caf80535781c2e3b46334307b0afb78542a81f6ac55e1ca41ce90c91340",
+    "sitemap.php": "7fe3208c2b08ea55e253a027249787ee3ece5792f81c293f3a913cf1656be0a6",
+    "text-styles.json": "e5dfdd2b9978c32fbccdb0ce3bc5eb10f8e2e1678405d8eb2187cfd691e28216",
+    "upload.php": "c4cf2ea654dda23da0d5202443c441dc02efc9749835b24e9eced903843734d3",
+    "migrations.php": "e2dd8022d3e24412588f39be294bbdaaeed9136c14eef17e1f9fea51f45efc1c",
+    "storage/.htaccess": "fa28d421a28ed9b6f4b997d5119c2b8adbacff6e2dd119a179b71230f9664934",
+    "uploads/.htaccess": "327eebe3b52dbf8b0d653d8d798308f33689faf9540eecbf9c7ba7108fe9fc8c",
+    "build.mjs": "1897b76203d792bb1175f29e1bc5d06d342c72b2b8e2f606a4bd94f438ea51c2",
+    "config.mjs": "fb0cfec540e03eb55f596cd7e17194514430525f6da5c46f091f9f58d98f4f68"
+  }
+}

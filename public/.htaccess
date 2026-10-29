@@ -1,0 +1,9 @@
+Options -Indexes
+DirectoryIndex index.php
+RewriteEngine On
+RewriteRule ^(?:src|editor|scripts|node_modules|\.git|\.local)(?:/|$) - [F,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ site-editor/site.php [L]
+ErrorDocument 404 /404.php
+

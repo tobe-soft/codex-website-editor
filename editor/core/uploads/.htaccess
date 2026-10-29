@@ -1,0 +1,10 @@
+Options -Indexes
+<IfModule mod_mime.c>
+RemoveHandler .jpg .jpeg .png .webp
+</IfModule>
+<FilesMatch "\.(?!jpg$|png$|webp$|htaccess$)[^.]+$">
+Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+Header set X-Content-Type-Options nosniff
+</IfModule>

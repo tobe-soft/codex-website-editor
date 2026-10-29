@@ -1,0 +1,32 @@
+{
+  "name": "codex-website-editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/build-editor.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "editor:upgrade": "node scripts/update-editor-core.mjs",
+    "test:upgrade": "node --test scripts/editor-publish-transaction.test.mjs",
+    "editor:setup": "node scripts/setup-editor.mjs",
+    "test:editor": "node scripts/test-editor.mjs",
+    "editor:publish": "node scripts/publish-editor.mjs"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@axe-core/playwright": "^4.13.0",
+    "@tailwindcss/vite": "^4.3.1",
+    "astro": "^7.3.5",
+    "basic-ftp": "^6.2.1",
+    "parse5": "^8.0.1",
+    "playwright": "^1.63.0",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "license": "AGPL-3.0-only"
+}

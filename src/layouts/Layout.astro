@@ -1,0 +1,15 @@
+---
+import site from '../../site.config.json';
+import defaults from '../../public/site-editor/site-defaults.json';
+import Editable from '../components/Editable.astro';
+import '../styles/site.css';
+const {title=site.name, description='Eine Website, die zu Ihnen passt.'}=Astro.props;
+const navigation=(footer=false)=>import.meta.env.DEV?defaults.pages.filter(p=>footer?p.showInFooter:p.showInMenu).map(p=>'<a href="'+p.path+'">'+p.name+'</a>').join(''):(footer?'__EDITOR_FOOTER_NAVIGATION__':'__EDITOR_NAVIGATION__');
+const canonical=new URL(Astro.url.pathname,site.origin);
+---
+<!doctype html><html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content={description}/><title>{title} | {site.name}</title><link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.svg" type="image/svg+xml"/></head><body>
+<a class="skip-link" href="#main">Zum Inhalt</a>
+<header class="header"><div class="container nav-row"><a class="brand" href="/" aria-label="Zur Startseite"><img src="/images/logo.svg" data-edit-image="brand.logo" alt="Beispielwebsite" width="44" height="44"/><Editable id="brand.name" as="span">Beispielwebsite</Editable></a><nav class="desktop-nav" aria-label="Hauptmenü"><Fragment set:html={navigation()}/></nav><details class="mobile-nav"><summary>Menü</summary><nav aria-label="Mobiles Hauptmenü"><Fragment set:html={navigation()}/></nav></details></div></header>
+<main id="main"><slot/></main>
+<footer><div class="container footer-row"><div><Editable id="footer.name" as="p">Raum für Ihre Ideen.</Editable><Editable id="footer.note" as="small">Persönlich. Klar. Mit Blick nach vorn.</Editable></div><nav aria-label="Footermenü"><Fragment set:html={navigation(true)}/></nav></div></footer>
+</body></html>

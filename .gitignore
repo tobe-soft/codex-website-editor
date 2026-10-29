@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.local/
+.editor-tools/
+public/site-editor/bootstrap.php
+public/site-editor/storage/
+public/site-editor/uploads/
+*.log
+.DS_Store
+Thumbs.db
