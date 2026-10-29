@@ -5,7 +5,7 @@ Die bisherige Kundenwebsite und deren Webspace nicht verändern oder als Testzie
 verwenden. Lokale Herkunftshinweise stehen unter .local/SOURCE.md und gehören
 nicht auf GitHub.
 
-Gemeinsamer Core: editor/core/, Version 1.3.1, Datenformat 2, Integration 1.
+Gemeinsamer Core: editor/core/, Version 1.3.2, Datenformat 2, Integration 1.
 editor/core.lock.json fixiert die geprüfte Version. Änderungen versionieren,
 Migrationen testen und die Lockdatei nach Prüfung gezielt erneuern. Erhalte die
 Upgradegrenzen und alle Funktionen aus PROJECT-BRIEF.md.

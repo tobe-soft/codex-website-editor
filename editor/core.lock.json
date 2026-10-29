@@ -1,10 +1,10 @@
 {
   "system": "astro-frontend-editor",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "dataSchema": 2,
   "integrationVersion": 1,
   "files": {
-    "release.json": "e550fcf482ba89e260b909c9a49c5957a6f25a207d9af559b54b1e5e58f9059e",
+    "release.json": "b0f22e96893726712b9ddf537e4144f82fa2ea2584123344f26fc744f8d96e02",
     ".htaccess": "c54b1aebabfb9eb7b1681b48ad05e1164569c9690dae63c6090ce47d87bc5516",
     "api.php": "bb12ed615feaac3d1cf10b7b0431e8653d437c36c5be33ec42fb86e5eab08ed7",
     "editor.css": "ffefa4cf7f650c6d4f195ee9fa4080ec84b544db494b4a8300162ad227600638",
@@ -24,7 +24,7 @@
     "storage/.htaccess": "fa28d421a28ed9b6f4b997d5119c2b8adbacff6e2dd119a179b71230f9664934",
     "uploads/.htaccess": "327eebe3b52dbf8b0d653d8d798308f33689faf9540eecbf9c7ba7108fe9fc8c",
     "themes.php": "9f6d8f693fd9a99db71fa13f5b273100066b147fc315bdd94168dadf67226ff1",
-    "themes.json": "07ac6e925faddb9c73574bc8519a65e83d0c94c1eed3dda0ec61c5e78ed08d7f",
+    "themes.json": "fa73452316c77cb2baca904de4718c572bfa1c13c4af1d0c2e59aa1a8b954c03",
     "build.mjs": "87790ae3327d63f13ce6e228f7f427ab153eced1036dc8b05d5250f3016f6ddd",
     "config.mjs": "4f4bd098afcc55170407b46ed3e76b48a5e0016e14758fcd4fb9c1aa47dc3a94"
   }

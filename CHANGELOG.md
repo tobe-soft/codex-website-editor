@@ -1,5 +1,12 @@
 # Änderungen
 
+## 0.4.2 – 29.10.2026
+
+- Atlantik erhält ruhigeres Marineblau und gedämpfte Graublautöne, angelehnt an
+  die vom Anwender genannte Referenz. Bestehende Atlantik-Auswahl übernimmt die
+  neue Palette automatisch; Inhalte und individuelle Einstellungen bleiben erhalten.
+
+
 ## 0.4.1 – 29.10.2026
 
 - Core 1.3.1: Beide Menüvarianten folgen dem Farbkonzept einschließlich

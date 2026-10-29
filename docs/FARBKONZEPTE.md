@@ -36,3 +36,10 @@ Stilanpassungen wieder möglich. Die Wahl ist Teil des Inhaltsstands, der
 Revision, des Exports und der Rücknahme. Bereits bestehende Websites behalten
 beim Update ihren Stil, bis sie die CSS-Variablen-Anbindung aktivieren und ein
 Konzept ausdrücklich anwenden.
+
+## Verfeinerung von Atlantik
+
+Am 29.10.2026 auf Wunsch des Anwenders an https://jakob-edv.de/ orientiert:
+Haupttext/Buttons Marineblau #0a3168, Nebenangaben Graublau #566780 und
+Links #316ba5. Die Referenz wurde ausschließlich lesend untersucht.
+Es wurden keine Inhalte, Bilder oder Zugänge übernommen.
