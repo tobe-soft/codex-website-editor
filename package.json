@@ -1,6 +1,6 @@
 {
   "name": "codex-website-editor",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,8 @@
     "test:upgrade": "node --test scripts/editor-publish-transaction.test.mjs",
     "editor:setup": "node scripts/setup-editor.mjs",
     "test:editor": "node scripts/test-editor.mjs",
-    "editor:publish": "node scripts/publish-editor.mjs"
+    "editor:publish": "node scripts/publish-editor.mjs",
+    "test:themes": "node --test scripts/theme-contrast.test.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

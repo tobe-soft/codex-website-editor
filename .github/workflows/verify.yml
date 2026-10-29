@@ -16,6 +16,7 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - run: npm run test:themes
       - run: npm run test:upgrade
       - run: node --test scripts/editor-core.test.mjs
       - run: find dist -name '*.php' -exec php -l {} \;

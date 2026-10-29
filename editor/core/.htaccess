@@ -1,4 +1,4 @@
 Options -Indexes
-<FilesMatch "^(registry|asset-registry|bootstrap|runtime|media-runtime|site-runtime|page-shell|content|migrations)\.php$">
+<FilesMatch "^(registry|asset-registry|bootstrap|runtime|media-runtime|site-runtime|page-shell|content|migrations|themes)\.php$">
 Require all denied
 </FilesMatch>

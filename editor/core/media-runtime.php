@@ -55,7 +55,7 @@ function editor_apply_media(array $input,array &$next): void {
         $next['links'][$id]=$link;
     }
 }
-function editor_content_snapshot(array $state): array {return ['blocks'=>$state['blocks'],'globals'=>$state['globals'],'images'=>$state['images'],'links'=>$state['links'],'pages'=>$state['pages']??json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true)['pages'],'menu'=>$state['menu']??json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true)['menu']];}
+function editor_content_snapshot(array $state): array {return ['theme'=>$state['theme']??null,'blocks'=>$state['blocks'],'globals'=>$state['globals'],'images'=>$state['images'],'links'=>$state['links'],'pages'=>$state['pages']??json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true)['pages'],'menu'=>$state['menu']??json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true)['menu']];}
 function editor_upload_limit(): int {
     $parse=static function(string $s): int {$s=trim($s);$unit=strtolower(substr($s,-1));return (int)$s*match($unit){'g'=>1073741824,'m'=>1048576,'k'=>1024,default=>1};};
     $limits=[5242880];foreach(['upload_max_filesize','post_max_size'] as $key){$n=$parse((string)ini_get($key));if($n>0)$limits[]=$n;}return min($limits);

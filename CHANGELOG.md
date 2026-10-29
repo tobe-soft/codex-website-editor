@@ -1,5 +1,13 @@
 # Änderungen
 
+## 0.4.0 – 29.10.2026
+
+- Core 1.3.0: Vier vollständige Farb-/Schriftkonzepte mit Admin-Vorschau.
+- Auswahl gilt für alle Seiten, einschließlich Flächen, Menüs und Footer.
+- Farbkonzepte werden mit Inhalt exportiert und wiederhergestellt.
+- Kontrasttests und Browserprüfungen für alle vier Paletten.
+
+
 ## 0.3.0 – 29.10.2026
 
 - Core 1.2.0: Adminpasswort direkt beim ersten Aufruf festlegen, ohne Schlüssel.

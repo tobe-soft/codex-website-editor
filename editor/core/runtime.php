@@ -4,7 +4,8 @@ declare(strict_types=1);
 const EDITOR_PREFIX = "<?php exit; ?>\n";
 function editor_path(): string { return __DIR__ . '/storage/state.php'; }
 require_once __DIR__.'/migrations.php';
-function editor_default(): array { $seed=editor_migrate_state(is_file(__DIR__.'/content.php')?require __DIR__.'/content.php':['schema'=>1]);$site=json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true,512,JSON_THROW_ON_ERROR);return ['schema'=>editor_release()['dataSchema'],'revision'=>$seed['revision']??0,'blocks'=>$seed['blocks']??[],'globals'=>$seed['globals']??[],'images'=>$seed['images']??[],'links'=>$seed['links']??[],'assets'=>$seed['assets']??[],'pages'=>editor_normalize_pages($seed['pages']??$site['pages']),'menu'=>$seed['menu']??$site['menu'],'admin'=>null,'previous'=>null,'attempts'=>[]]; }
+require_once __DIR__.'/themes.php';
+function editor_default(): array { $seed=editor_migrate_state(is_file(__DIR__.'/content.php')?require __DIR__.'/content.php':['schema'=>1]);$site=json_decode(file_get_contents(__DIR__.'/site-defaults.json'),true,512,JSON_THROW_ON_ERROR);return ['schema'=>editor_release()['dataSchema'],'revision'=>$seed['revision']??0,'blocks'=>$seed['blocks']??[],'globals'=>$seed['globals']??[],'images'=>$seed['images']??[],'links'=>$seed['links']??[],'assets'=>$seed['assets']??[],'pages'=>editor_normalize_pages($seed['pages']??$site['pages']),'menu'=>$seed['menu']??$site['menu'],'theme'=>$seed['theme']??null,'admin'=>null,'previous'=>null,'attempts'=>[]]; }
 function editor_read(): array {
     $file=editor_path(); if (!is_file($file)) return editor_default();
     $raw=file_get_contents($file); if ($raw===false || !str_starts_with($raw,EDITOR_PREFIX)) throw new RuntimeException('Invalid storage');
@@ -68,7 +69,7 @@ function editor_styles(): string {
     global $editorState; $css='';
     foreach($editorState['globals'] as $type=>$style){$selector='body [data-text-style="'.$type.'"]';$css.=$selector.'{'.editor_style_properties($style).'}';}
     foreach($editorState['blocks'] as $id=>$block)if(!empty($block['style'])){ $selector='body [data-edit-id="'.$id.'"]';$css.=$selector.','.$selector.' :is(span,em,strong){'.editor_style_properties($block['style']).'}'; }
-    return editor_menu_styles().'<style id="editor-published-styles">'.$css.'</style>';
+    return editor_theme_styles().editor_menu_styles().'<style id="editor-published-styles">'.$css.'</style>';
 }
 function editor_controls(): string {
     if(!isset($_COOKIE[editor_config()['sessionName']]))return '';

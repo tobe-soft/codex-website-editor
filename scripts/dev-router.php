@@ -6,7 +6,7 @@ $config=json_decode(file_get_contents($root.'/site-editor/site-config.json'),tru
 if($base!==''&&!($path===$base||str_starts_with($path,$base.'/'))){http_response_code(404);exit;}
 if($base!==''&&$path===$base){header('Location: '.$base.'/',true,301);exit;}
 if($base!=='')$path=substr($path,strlen($base))?:'/';
-if(str_contains($path,"\0")||preg_match('~(?:^|/)\.~',$path)||preg_match('~^/site-editor/(?:storage|uploads)/.*\.php$~',$path)||preg_match('~^/site-editor/(?:registry|asset-registry|bootstrap|runtime|media-runtime|site-runtime|page-shell|content|migrations)\.php$~',$path)){http_response_code(403);exit;}
+if(str_contains($path,"\0")||preg_match('~(?:^|/)\.~',$path)||preg_match('~^/site-editor/(?:storage|uploads)/.*\.php$~',$path)||preg_match('~^/site-editor/(?:registry|asset-registry|bootstrap|runtime|media-runtime|site-runtime|page-shell|content|migrations|themes)\.php$~',$path)){http_response_code(403);exit;}
 $target=realpath($root.$path);
 if($target!==false&&($target===$root||str_starts_with($target,$root.DIRECTORY_SEPARATOR))){
  if(is_dir($target)&&is_file($target.'/index.php')){require $target.'/index.php';return true;}

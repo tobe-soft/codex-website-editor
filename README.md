@@ -87,7 +87,7 @@ ersetzen weder FTPS-Zugang noch die Prüfung der Apache-Konfiguration.
 
 ## Gemeinsamer Core und Updates
 
-`editor/core/` ist der versionierte gemeinsame Core (1.2.0, Datenformat 2,
+`editor/core/` ist der versionierte gemeinsame Core (1.3.0, Datenformat 2,
 Integration 1). `editor/core.lock.json` fixiert dessen geprüfte Prüfsummen.
 Websitegestaltung und Inhalte liegen außerhalb des Cores. Neue Core-Releases
 müssen ihre Version erhöhen und Migrationen erhalten.
@@ -133,7 +133,7 @@ privaten Websitequellen, Daten, Uploads oder Zugangsdaten auf dem Webspace erzeu
 ## Installation unter einem Unterpfad
 
 Optional `basePath` in `site.config.json` setzen, zum Beispiel `/codex` (ohne
-abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.2.0
+abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.3.0
 unterstützt die bisherige Domainwurzel weiter unverändert; Datenformat 2 und
 Integration 1 bleiben kompatibel. Seitenadressen in Inhaltsdaten bleiben relativ
 zur Installation. Für eine lokale, nicht versionierte Hostingkonfiguration kann
@@ -143,3 +143,19 @@ müssen dieselbe Konfiguration verwenden. Zugangsdaten nur über stdin übergebe
 Ein realer Erstinstallations- und Update-Test unter einem Unterpfad wurde mit
 PHP 8.3 durchgeführt: Anmeldung, Veröffentlichung, neue Seiten, Bild-Upload,
 Speicherschutz und Erhalt von Adminzugang/Inhalten/Medien bestanden.
+
+## Farbkonzepte
+
+In der Verwaltung unter Farbkonzepte stehen Salbei (Grün), Atlantik (Blau),
+Sonne (Gelb) und Graphit (Dunkel) mit Vorschau zur Auswahl. Anwenden veröffentlicht
+die Wahl auf allen Seiten. Alte Farb- und Schriftanpassungen werden ersetzt;
+Inhalte, Bilder, Schriftgrößen und Textrollen bleiben erhalten. Spätere einzelne
+Stilanpassungen bleiben möglich. Export und letzte Veröffentlichung zurücknehmen
+umfassen auch das Farbkonzept. Es werden keine externen Schriftdateien geladen.
+
+Bestehende eigene Websites benötigen für vollständiges Theming die CSS-Variablen
+--site-* und themeIntegrationVersion: 1 in ihrer Websitekonfiguration. Der Core
+blendet die Auswahl bis zu dieser ausdrücklichen Anbindung aus. Ein reines
+Core-Update verändert deshalb keine bestehende Kundengestaltung.
+
+Recherche und Entwurfsentscheidungen: docs/FARBKONZEPTE.md.

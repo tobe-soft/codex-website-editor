@@ -1,0 +1,102 @@
+{
+  "sage": {
+    "name": "Salbei",
+    "subtitle": "Natürlich und ruhig",
+    "description": "Helle Naturtöne, dunkles Grün und klare serifenlose Schrift.",
+    "fontLabel": "Arial · klar und vertraut",
+    "mode": "light",
+    "colors": {
+      "bg": "#fafbf8",
+      "surface": "#ffffff",
+      "tint": "#edf2ec",
+      "text": "#183a38",
+      "muted": "#536965",
+      "accent": "#28675d",
+      "onAccent": "#ffffff",
+      "link": "#28675d",
+      "border": "#a8beb4",
+      "footer": "#183a38",
+      "footerText": "#ffffff",
+      "footerMuted": "#c9d8ce",
+      "focus": "#a75a27",
+      "active": "#e2ece6"
+    },
+    "bodyFont": "Arial, sans-serif",
+    "headingFont": "Arial, sans-serif"
+  },
+  "blue": {
+    "name": "Atlantik",
+    "subtitle": "Blau · klar und sachlich",
+    "description": "Blau auf kühlen hellen Flächen; passend für Unternehmen und Dienstleistungen.",
+    "fontLabel": "Systemschrift · modern und sachlich",
+    "mode": "light",
+    "colors": {
+      "bg": "#f8fafc",
+      "surface": "#ffffff",
+      "tint": "#eef4ff",
+      "text": "#172554",
+      "muted": "#475569",
+      "accent": "#1d4ed8",
+      "onAccent": "#ffffff",
+      "link": "#1d4ed8",
+      "border": "#a5b8d4",
+      "footer": "#172554",
+      "footerText": "#ffffff",
+      "footerMuted": "#cbd5e1",
+      "focus": "#1d4ed8",
+      "active": "#dbeafe"
+    },
+    "bodyFont": "\"Segoe UI\", system-ui, sans-serif",
+    "headingFont": "\"Segoe UI\", system-ui, sans-serif"
+  },
+  "yellow": {
+    "name": "Sonne",
+    "subtitle": "Gelb · warm und charaktervoll",
+    "description": "Goldgelbe Akzente, cremefarbene Flächen und dunkle Schrift. Überschriften mit Serifen.",
+    "fontLabel": "Georgia + Systemschrift · freundlich und ausdrucksstark",
+    "mode": "light",
+    "colors": {
+      "bg": "#fffdf5",
+      "surface": "#ffffff",
+      "tint": "#fff3bf",
+      "text": "#292211",
+      "muted": "#675936",
+      "accent": "#facc15",
+      "onAccent": "#292211",
+      "link": "#785900",
+      "border": "#b8a66b",
+      "footer": "#292211",
+      "footerText": "#fffdf5",
+      "footerMuted": "#e6d8ae",
+      "focus": "#785900",
+      "active": "#fef08a"
+    },
+    "bodyFont": "system-ui, sans-serif",
+    "headingFont": "Georgia, serif"
+  },
+  "dark": {
+    "name": "Graphit",
+    "subtitle": "Dunkel · konzentriert und modern",
+    "description": "Abgestufte dunkle Flächen, helle Schrift und kühle blaue Akzente.",
+    "fontLabel": "Systemschrift · ruhig und gut lesbar",
+    "mode": "dark",
+    "colors": {
+      "bg": "#111827",
+      "surface": "#1f2937",
+      "tint": "#182230",
+      "text": "#f3f4f6",
+      "muted": "#c1cad7",
+      "accent": "#93c5fd",
+      "onAccent": "#111827",
+      "link": "#93c5fd",
+      "border": "#64748b",
+      "footer": "#0b1120",
+      "footerText": "#f3f4f6",
+      "footerMuted": "#c1cad7",
+      "focus": "#facc15",
+      "active": "#263c58"
+    },
+    "bodyFont": "system-ui, sans-serif",
+    "headingFont": "system-ui, sans-serif"
+  }
+}

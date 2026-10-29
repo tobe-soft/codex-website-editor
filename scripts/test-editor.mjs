@@ -14,7 +14,7 @@ try{
  browser=await chromium.launch({headless:true});const context=await browser.newContext();const page=await context.newPage();
  const errors=[];const escaped=[];page.on('request',r=>{const u=new URL(r.url());if(prefix&&u.origin===new URL(base).origin&&u.pathname!==prefix&&!u.pathname.startsWith(prefix+'/'))escaped.push(u.pathname);});page.on('pageerror',e=>errors.push(e.message));
  await page.goto(base);await assert.equal(await page.locator('h1').innerText(),'Gemeinsam wird aus Ihrer Idee etwas Gutes.');
- await page.screenshot({path:'.editor-tools/desktop.png',fullPage:true});
+ await page.screenshot({path:'.editor-tools/desktop.png',fullPage:true});assert.equal(await page.locator('#editor-theme-styles').count(),0,'Legacy designs keep their original appearance');
  const api=async data=>{const r=await context.request.post(base+'/site-editor/api.php',{data});return {status:r.status(),body:await r.json()}};
  const get=async()=>await(await context.request.get(base+'/site-editor/api.php')).json();
  let s=await get();assert.equal(s.setup,true);
@@ -43,6 +43,23 @@ try{
 
  assert.equal((await api({action:'publish',revision:s.revision-1,csrf:s.csrf,scope:'global',id:'p',style:{size:18}})).status,409);
  await publish({scope:'global',id:'p',style:{size:19}});
+ // Complete theme changes must keep content/sizes, persist, and restore together.
+ const rgb=hex=>'rgb('+hex.slice(1).match(/../g).map(n=>parseInt(n,16)).join(', ')+')';
+ for(const theme of ['sage','blue','yellow','dark']){
+  await publish({scope:'theme',theme});s=await get();assert.equal(s.theme,theme);await page.goto(base);
+  const c=s.themes[theme].colors;
+  assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.bg));
+  assert.equal(await page.locator('.header').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.surface));
+  assert.equal(await page.locator('.button').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.accent));
+  assert.equal(await page.locator('.button').evaluate(e=>getComputedStyle(e).color),rgb(c.onAccent));
+  assert.equal(await page.locator('footer').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.footer));
+  assert.equal(s.blocks['home.heading'].text,'Unser neutraler Funktionstest');assert.equal(s.blocks['home.heading'].style.size,42);assert.equal(s.blocks['home.heading'].style.color,undefined);assert.equal(s.globals.p.size,19);
+  if(theme==='yellow')assert.match(await page.locator('[data-edit-id="home.heading"]').evaluate(e=>getComputedStyle(e).fontFamily),/Georgia/);
+  await page.screenshot({path:'.editor-tools/theme-'+theme+'.png',fullPage:true});
+ }
+ s=await get();assert.equal((await api({action:'publish',csrf:s.csrf,revision:s.revision,scope:'theme',theme:'invalid'})).status,422);
+ assert.equal((await api({action:'restore',csrf:s.csrf,revision:s.revision})).status,200);assert.equal((await get()).theme,'yellow');
+ await page.goto(base+'/site-editor/');await page.locator('#admin-themes input[value="blue"]').check();await page.locator('#admin-themes button[type="submit"]').click();await page.locator('.editor-theme-current').filter({hasText:'Atlantik'}).waitFor();assert.equal((await get()).theme,'blue');await page.locator('#admin-themes').screenshot({path:'.editor-tools/admin-themes.png'});
  await publish({scope:'menu',menu:{design:'rounded',fontSize:16,gap:18,border:1,radius:12}});
  s=await get();const pages=[...s.pages,{id:'page-1234567890abcdef',path:'/testseite/',name:'Testseite',showInMenu:false,showInFooter:true,intro:'Testeinleitung',body:'Testinhalt'}];
  await publish({scope:'pages',pages});await page.goto(base+'/testseite/');assert.equal(await page.locator('h1').innerText(),'Testseite');assert.ok(await page.locator('footer nav a[href="'+prefix+'/testseite/"]').count());assert.equal(await page.locator('.desktop-nav a[href="'+prefix+'/testseite/"]').count(),0);
@@ -52,7 +69,7 @@ try{
  s=await get();assert.equal((await api({action:'restore',csrf:s.csrf,revision:s.revision})).status,200);assert.equal((await page.goto(base+'/testseite/')).status(),200);
  s=await get();assert.equal((await api({action:'logout',csrf:s.csrf})).status,200);assert.equal((await get()).authenticated,false);
  await page.goto(base+'/site-editor/');await page.locator('#admin-login input[name="password"]').fill('a');await page.locator('#admin-login button').click();await page.locator('#admin-ready').waitFor({state:'visible'});
- const downloadPromise=page.waitForEvent('download');await page.locator('#admin-export').click();const download=await downloadPromise;assert.match(download.suggestedFilename(),/json$/);
+ const downloadPromise=page.waitForEvent('download');await page.locator('#admin-export').click();const download=await downloadPromise;assert.match(download.suggestedFilename(),/json$/);const exported=JSON.parse(await fs.readFile(await download.path(),'utf8'));assert.equal(exported.theme,'blue');
  s=await get();assert.equal((await api({action:'password',csrf:s.csrf,current:'a',password:'b'})).status,200);
  s=await get();await api({action:'logout',csrf:s.csrf});
  s=await get();assert.equal((await api({action:'login',csrf:s.csrf,password:'b'})).status,200);

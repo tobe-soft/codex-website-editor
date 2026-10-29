@@ -19,7 +19,7 @@ try {
  if($_SERVER['REQUEST_METHOD']==='GET'){
   $auth=editor_authenticated($state);
   if($auth)$_SESSION['active']=time();
-  respond(200,['authenticated'=>$auth,'setup'=>empty($state['admin']),'csrf'=>$_SESSION['csrf'],'revision'=>$state['revision'],'blocks'=>$auth?$state['blocks']:new stdClass(),'globals'=>$auth?$state['globals']:new stdClass(),'previous'=>$auth&&!empty($state['previous']),'schema'=>$state['schema'],'coreVersion'=>$auth?editor_release()['version']:null,'siteId'=>$auth?editor_config()['id']:null,'categories'=>$auth?editor_categories():new stdClass(),'categoryCounts'=>$auth?editor_category_counts():new stdClass(),'images'=>$auth?$state['images']:new stdClass(),'links'=>$auth?$state['links']:new stdClass(),'assets'=>$auth?$state['assets']:new stdClass(),'media'=>$auth?$editorAssets:new stdClass(),'gallery'=>$auth?editor_gallery():[],'uploadLimit'=>editor_upload_limit(),'pages'=>$auth?$state['pages']:[],'menu'=>$auth?editor_menu_settings():new stdClass()]);
+  respond(200,['authenticated'=>$auth,'setup'=>empty($state['admin']),'csrf'=>$_SESSION['csrf'],'revision'=>$state['revision'],'blocks'=>$auth?$state['blocks']:new stdClass(),'globals'=>$auth?$state['globals']:new stdClass(),'previous'=>$auth&&!empty($state['previous']),'schema'=>$state['schema'],'coreVersion'=>$auth?editor_release()['version']:null,'siteId'=>$auth?editor_config()['id']:null,'categories'=>$auth?editor_categories():new stdClass(),'categoryCounts'=>$auth?editor_category_counts():new stdClass(),'images'=>$auth?$state['images']:new stdClass(),'links'=>$auth?$state['links']:new stdClass(),'assets'=>$auth?$state['assets']:new stdClass(),'media'=>$auth?$editorAssets:new stdClass(),'gallery'=>$auth?editor_gallery():[],'uploadLimit'=>editor_upload_limit(),'pages'=>$auth?$state['pages']:[],'menu'=>$auth?editor_menu_settings():new stdClass(),'theme'=>$auth?($state['theme']??null):null,'themes'=>$auth&&editor_theme_supported()?editor_themes():new stdClass()]);
  }
  if($_SERVER['REQUEST_METHOD']!=='POST')respond(405,['error'=>'Methode nicht erlaubt.']);
  if(($_SERVER['CONTENT_LENGTH']??0)>1048576)respond(413,['error'=>'Änderung zu groß.']);
@@ -55,7 +55,7 @@ try {
   if(empty($state['previous']))respond(422,['error'=>'Kein vorheriger Stand vorhanden.']);$next=$state['previous'];
  } else {
   $scope=$input['scope']??'block';$id=$input['id']??'';
-  if(in_array($scope,['menu','pages'],true)){editor_apply_site($input,$next);}elseif(in_array($scope,['image','link'],true)){editor_apply_media($input,$next);}elseif($scope==='global'){
+  if($scope==='theme'){editor_apply_theme($input,$next);}elseif(in_array($scope,['menu','pages'],true)){editor_apply_site($input,$next);}elseif(in_array($scope,['image','link'],true)){editor_apply_media($input,$next);}elseif($scope==='global'){
    if(!is_string($id)||!array_key_exists($id,editor_categories()))respond(422,['error'=>'Ungültiger Textstil.']);
    $next['globals'][$id]=check_style($input['style']??[]);
   } elseif($scope==='block'){
@@ -75,6 +75,6 @@ try {
    }
   } else respond(422,['error'=>'Ungültiger Bereich.']);
  }
- $state['previous']=editor_content_snapshot($state);$state['pages']=$next['pages']??$state['pages'];$state['menu']=$next['menu']??$state['menu'];$state['images']=$next['images']??$state['images'];$state['links']=$next['links']??$state['links'];$state['blocks']=$next['blocks'];$state['globals']=$next['globals'];$state['revision']++;editor_write($state);respond(200,['ok'=>true,'revision'=>$state['revision']]);
+ $state['previous']=editor_content_snapshot($state);$state['theme']=$next['theme']??null;$state['pages']=$next['pages']??$state['pages'];$state['menu']=$next['menu']??$state['menu'];$state['images']=$next['images']??$state['images'];$state['links']=$next['links']??$state['links'];$state['blocks']=$next['blocks'];$state['globals']=$next['globals'];$state['revision']++;editor_write($state);respond(200,['ok'=>true,'revision'=>$state['revision']]);
 } catch(Throwable $error){error_log('Site editor: '.$error->getMessage());respond(500,['error'=>'Änderung konnte nicht gespeichert werden.']);}
 finally { if(is_resource($lock)){flock($lock,LOCK_UN);fclose($lock);} }

@@ -3,6 +3,24 @@
  const {node,send}=editor;
  function input(parent,title,value,type='text',attrs={}){const label=node('label',title),field=node('input',null,{type,...attrs});field.value=String(value);label.append(field);parent.append(label);return field;}
  function status(parent){const p=node('p','',{role:'status',class:'editor-message'});parent.append(p);return p;}
+
+ function renderThemes(){
+  const root=document.querySelector('#admin-themes');if(!root)return;if(!Object.keys(state.themes??{}).length){root.hidden=true;document.querySelector('[href="#admin-themes"]')?.remove();return;}
+  root.replaceChildren(node('h2','Farbkonzepte'),node('p','Abgestimmte Farben und Schriftarten für die gesamte Website: Hintergründe, Texte, Menüs, Schaltflächen und Footer.'));
+  const current=node('p',state.theme?'Aktuell: '+state.themes[state.theme].name:'Aktuell: Gestaltung der Vorlage',{class:'editor-theme-current'});root.append(current);
+  const form=node('form'),choices=node('fieldset',null,{class:'editor-theme-choices'});choices.append(node('legend','Farbkonzept auswählen'));
+  for(const [id,theme]of Object.entries(state.themes)){
+   const label=node('label',null,{class:'editor-theme-option'}),radio=node('input',null,{type:'radio',name:'theme',value:id,required:'','aria-label':theme.name+' – '+theme.subtitle});radio.checked=id===(state.theme??'sage');label.append(radio);
+   const sample=node('span',null,{class:'editor-theme-sample','aria-hidden':'true'});for(const [key,value]of Object.entries(theme.colors))sample.style.setProperty('--preview-'+key,value);sample.style.fontFamily=theme.bodyFont;
+   const bar=node('span','●   Beispielwebsite',{class:'editor-theme-bar'}),heading=node('span','Ihre Ideen. Ihr Auftritt.',{class:'editor-theme-heading'});heading.style.fontFamily=theme.headingFont;
+   const copy=node('span','Klar gestaltet. Gut lesbar.',{class:'editor-theme-copy'}),cta=node('span','Mehr erfahren →',{class:'editor-theme-cta'}),foot=node('span','Kontakt · Impressum',{class:'editor-theme-footer'});sample.append(bar,heading,copy,cta,foot);
+   label.append(sample,node('strong',theme.name),node('span',theme.subtitle),node('small',theme.description),node('small',theme.fontLabel));choices.append(label);
+  }
+  form.append(choices,node('p','Beim Anwenden werden bisherige Farb- und Schriftanpassungen ersetzt. Texte, Bilder, Schriftgrößen und Seiten bleiben erhalten. Anschließend können Sie einzelne Stile wieder anpassen.'));
+  const message=status(form),button=node('button','Farbkonzept anwenden',{type:'submit'}),view=node('a','Website ansehen',{href:new URL('../',location.href).pathname,target:'_blank',rel:'noopener'});form.append(button,view);root.append(form);
+  form.onsubmit=async event=>{event.preventDefault();button.disabled=true;try{const result=await send('publish',{scope:'theme',theme:form.elements.theme.value,revision:state.revision});state.revision=result.revision;location.reload();}catch(error){message.textContent=error.message;button.disabled=false;}};
+ }
+
  function renderMenu(){
   const root=document.querySelector('#admin-menu-design');root.replaceChildren(node('h2','Menü Design'),node('p','Gilt gemeinsam für Desktop und Mobilgeräte. Lange Menüs wechseln bei Platzmangel automatisch in die mobile Ansicht.'));
   const form=node('form'),label=node('label','Gesamt-Design'),design=node('select',null,{'aria-label':'Gesamt-Design'});for(const [value,text]of [['plain','Schlicht – Textlinks'],['rounded','Buttons mit abgerundeten Ecken']])design.append(node('option',text,{value}));design.value=state.menu.design;label.append(design);form.append(label);
@@ -32,5 +50,5 @@
   publish.onclick=async()=>{publish.disabled=true;try{const result=await send('publish',{scope:'pages',revision:state.revision,pages:draft});state.revision=result.revision;state.pages=draft.map(p=>({...p}));message.textContent='Seiten veröffentlicht.';}catch(error){message.textContent=error.message;}finally{publish.disabled=false;}};
   undo.onclick=async()=>{if(confirm('Den Stand vor der letzten Veröffentlichung wiederherstellen?'))try{await send('restore',{revision:state.revision});location.reload();}catch(error){message.textContent=error.message;}};draw();
  }
- renderMenu();renderPages();
+ renderThemes();renderMenu();renderPages();
 })();
