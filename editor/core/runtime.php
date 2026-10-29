@@ -20,7 +20,7 @@ function editor_write(array $state): void {
 function editor_session(): void {
     if(session_status()===PHP_SESSION_ACTIVE)return;
     ini_set('session.use_strict_mode','1'); ini_set('session.use_only_cookies','1');
-    session_name(editor_config()['sessionName']); session_set_cookie_params(['lifetime'=>0,'path'=>'/','secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']); session_start();
+    session_name(editor_config()['sessionName']); session_set_cookie_params(['lifetime'=>0,'path'=>editor_url('/'),'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']); session_start();
     $_SESSION['csrf'] ??= bin2hex(random_bytes(32));
 }
 function editor_authenticated(array $state): bool {
@@ -72,7 +72,7 @@ function editor_controls(): string {
     editor_session(); global $editorState;
     if(!editor_authenticated($editorState))return '';
     $_SESSION['active']=time();
-    return '<link rel="stylesheet" href="/site-editor/editor.css?v=7"><script src="/site-editor/editor.js?v=7" defer></script><script src="/site-editor/media.js?v=1" defer></script>';
+    return editor_public_html('<link rel="stylesheet" href="/site-editor/editor.css?v=7"><script src="/site-editor/editor.js?v=7" defer></script><script src="/site-editor/media.js?v=1" defer></script>');
 }
 $editorRegistry=is_file(__DIR__.'/registry.php')?require __DIR__.'/registry.php':[];
 $editorAssets=is_file(__DIR__.'/asset-registry.php')?require __DIR__.'/asset-registry.php':['images'=>[],'links'=>[]];

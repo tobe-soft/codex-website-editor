@@ -13,7 +13,7 @@ test('core update preserves site sources and blocks unversioned or locally modif
  const candidate=path.join(root,'candidate');await fs.cp('editor/core',candidate,{recursive:true});
  await fs.appendFile(path.join(candidate,'editor.css'),'\n/* test change */\n');
  await assert.rejects(updateCore({root,source:candidate,apply:true}),/new release version/);
- const release=JSON.parse(await fs.readFile(path.join(candidate,'release.json'),'utf8'));release.version='1.0.1';await fs.writeFile(path.join(candidate,'release.json'),JSON.stringify(release));
+ const release=JSON.parse(await fs.readFile(path.join(candidate,'release.json'),'utf8'));release.version=release.version.split('.').map((n,i)=>i===2?Number(n)+1:n).join('.');await fs.writeFile(path.join(candidate,'release.json'),JSON.stringify(release));
  const plan=await updateCore({root,source:candidate,apply:true});assert.equal(plan.applied,true);assert.equal(await fs.readFile(path.join(root,'site.config.json'),'utf8'),'site-specific fixture');
  assert.deepEqual(makeLock(await readCore(path.join(root,'editor/core'))),JSON.parse(await fs.readFile(path.join(root,'editor/core.lock.json'),'utf8')));
  await fs.appendFile(path.join(root,'editor/core/editor.css'),'\n/* local change */');await assert.rejects(updateCore({root,source:candidate}),/Local editor core differs/);

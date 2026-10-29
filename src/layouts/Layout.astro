@@ -1,5 +1,6 @@
 ---
-import site from '../../site.config.json';
+import {readSiteConfig} from '../../editor/core/config.mjs';
+const site=await readSiteConfig();
 import defaults from '../../public/site-editor/site-defaults.json';
 import Editable from '../components/Editable.astro';
 import '../styles/site.css';

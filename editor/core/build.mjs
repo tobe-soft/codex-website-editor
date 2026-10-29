@@ -15,9 +15,10 @@ for(const file of [...release.runtimeFiles,'release.json']){
  await fs.writeFile(path.join(destination,file),content);
 }
 await fs.writeFile(path.join(destination,'site-config.json'),JSON.stringify(site,null,2)+'\n');
-await fs.writeFile(path.join(destination,'installation.json'),JSON.stringify({system:release.system,coreVersion:release.version,dataSchema:release.dataSchema,integrationVersion:release.integrationVersion,siteId:site.id,origin:site.origin},null,2)+'\n');
+await fs.writeFile(path.join(destination,'installation.json'),JSON.stringify({system:release.system,coreVersion:release.version,dataSchema:release.dataSchema,integrationVersion:release.integrationVersion,siteId:site.id,origin:site.origin,basePath:site.basePath},null,2)+'\n');
 const root=path.resolve('dist');
 const catalog=JSON.parse(await fs.readFile(path.join(coreRoot,'text-styles.json'),'utf8'));
+const withBase=value=>site.basePath&&value.startsWith('/')&&!value.startsWith('//')&&value!==site.basePath&&!value.startsWith(site.basePath+'/')?site.basePath+value:value;
 const fields={},coverage=[],assets={images:{},links:{}};
 const get=(node,name)=>node.attrs?.find(attr=>attr.name===name)?.value;
 const hasClass=(node,name)=>(get(node,'class')??'').split(/\s+/).includes(name);
@@ -40,6 +41,7 @@ async function walk(dir){for(const entry of await fs.readdir(dir,{withFileTypes:
  const document=parse(await fs.readFile(file,'utf8'));let textNodes=0;const tokens=new Map();
  function visit(node,inherited=null,editableParent=false){
   if(node.nodeName==='#text'){if(node.value.trim()){if(!inherited)throw Error('Uncategorized text in '+file);textNodes++;}return;}
+  if(node.attrs)for(const attr of node.attrs)if(['href','src','action'].includes(attr.name))attr.value=withBase(attr.value);
   if(node.tagName==='img'&&get(node,'data-edit-image')){const id=get(node,'data-edit-image');if(!/^[a-z0-9.-]+$/.test(id))throw Error('Invalid image ID');assets.images[id]??={attrs:node.attrs};}
   if(['head','script','style','svg','img','template'].includes(node.tagName)||get(node,'aria-hidden')==='true')return;
   const current=node.tagName?category(node,inherited):inherited;
@@ -73,9 +75,9 @@ let shell=await fs.readFile(path.join(root,'page-template/index.php'),'utf8');
 shell=shell.replace("editor_page_guard('/page-template/');",'')
  .replaceAll('__EDITOR_PAGE_CONTENT__',"<?php echo editor_page_content($currentPage); ?>")
  .replace(/<title>[\s\S]*?<\/title>/,"<title><?php echo editor_page_title($currentPage['path'],$currentPage['name'].' | '.editor_config()['name']); ?></title>")
- .replace(/<link rel="canonical" href="[^"]*">/,'<link rel="canonical" href="<?php echo htmlspecialchars(editor_config()["origin"].$currentPage["path"],ENT_QUOTES); ?>">')
+ .replace(/<link rel="canonical" href="[^"]*">/,'<link rel="canonical" href="<?php echo htmlspecialchars(editor_config()["origin"].editor_url($currentPage["path"]),ENT_QUOTES); ?>">')
  .replace(/<meta property="og:title" content="[^"]*">/,'<meta property="og:title" content="<?php echo htmlspecialchars($currentPage["name"],ENT_QUOTES); ?>">')
- .replaceAll(site.origin+'/page-template/','<?php echo htmlspecialchars(editor_config()["origin"].$currentPage["path"],ENT_QUOTES); ?>');
+ .replaceAll(site.origin+site.basePath+'/page-template/','<?php echo htmlspecialchars(editor_config()["origin"].editor_url($currentPage["path"]),ENT_QUOTES); ?>');
 shell=shell.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,'<script type="application/ld+json"><?php echo editor_custom_metadata($currentPage); ?></script>').replace(/<meta name="description" content="[^"]*">/,'<meta name="description" content="<?php echo editor_page_description($currentPage); ?>">');
  await fs.writeFile(path.join(root,'site-editor/page-shell.php'),shell);await fs.unlink(path.join(root,'page-template/index.php'));await fs.rmdir(path.join(root,'page-template'));
 if(!Object.keys(fields).length)throw Error('No editable fields generated');

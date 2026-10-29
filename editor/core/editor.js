@@ -2,7 +2,8 @@
  'use strict';
  let state;let readyResolve;const ready=new Promise(resolve=>{readyResolve=resolve;});
  let reposition=()=>{};let retarget=()=>{};
- const endpoint='/site-editor/api.php';
+ const editorRoot=new URL('./',document.currentScript.src);
+ const endpoint=new URL('api.php',editorRoot).href;
  async function load(){const r=await fetch(endpoint,{cache:'no-store'});if(!r.ok)throw Error('Verwaltung nicht verfügbar.');return r.json();}
  async function send(action,data={}){const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,csrf:state.csrf,...data})});const result=await r.json();if(!r.ok)throw Error(result.error||'Anfrage fehlgeschlagen.');return result;}
  function node(tag,text,attrs={}){const e=document.createElement(tag);if(text)e.textContent=text;Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));return e;}
@@ -11,7 +12,7 @@
  function closeButton(d){const b=node('button','Abbrechen',{type:'button'});b.onclick=()=>d.close();return b;}
  function field(form,title,type,name,autocomplete){const l=node('label',title);const i=node('input',null,{type,name,required:'',autocomplete});l.append(i);form.append(l);return i;}
  function password(){const d=dialog('Adminpasswort ändern');const f=node('form');d.append(f);const current=field(f,'Bisheriges Passwort','password','current','current-password');const next=field(f,'Neues Passwort (mindestens 14 Zeichen)','password','password','new-password');next.minLength=14;next.maxLength=72;const confirm=field(f,'Neues Passwort wiederholen','password','confirm','new-password');const status=message(f);f.append(node('button','Passwort speichern',{type:'submit'}),closeButton(d));f.onsubmit=async e=>{e.preventDefault();if(next.value!==confirm.value){status.textContent='Die neuen Passwörter stimmen nicht überein.';return;}try{await send('password',{current:current.value,password:next.value});d.close();}catch(err){status.textContent=err.message;}};d.showModal();}
- async function logout(){try{await send('logout');location.href='/site-editor/';}catch(err){alert(err.message);}}
+ async function logout(){try{await send('logout');location.href=editorRoot.href;}catch(err){alert(err.message);}}
  function download(){const a=node('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({schema:state.schema,revision:state.revision,blocks:state.blocks,globals:state.globals,images:state.images,links:state.links,assets:state.assets,pages:state.pages,menu:state.menu},null,2)],{type:'application/json'}));a.download='website-inhalte.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
  const fontMap={sans:'Arial, sans-serif',serif:'Georgia, serif',mono:'Courier New, monospace'};
  function categorySelector(type){return `body [data-text-style="${type}"]`;}

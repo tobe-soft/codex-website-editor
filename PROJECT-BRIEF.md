@@ -69,8 +69,10 @@ Bestätigte Gestaltung: helle Website mit grüner Akzentfarbe; Start, Über uns,
 Leistungen, Kontakt sowie Impressum und Datenschutz im Footer. Standardseiten,
 page-template.astro, Erstinstallation, allgemeiner FTPS-Publisher und neutrale
 PHP-/Browser-/Migrationstests sind ergänzt. Die Tests prüfen auch Core-Updates,
-Datenerhalt und Rücksicherung. Der gemeinsame Core bleibt unverändert 1.0.0.
+Datenerhalt und Rücksicherung. Der gemeinsame Core bleibt bei 1.1.0 mit kompatibler Unterpfad-Unterstützung.
 
-Noch offen: GitHub-Zielkonto und Sichtbarkeit, tatsächliche Veröffentlichung
-und Release-Link sowie ein realer Hostinglauf auf dem später gewählten Ziel.
+GitHub wurde als private Vorlage veröffentlicht. Ein realer Hostinglauf unter
+einem Unterpfad mit Installation, funktionalem Editor und technischem Update
+unter Datenerhalt wurde erfolgreich geprüft. Individuelle Hostingkonfiguration
+und Zugangsdaten bleiben außerhalb von Git.
 Rechtliche Texte und Kontaktdaten sind ausdrücklich Beispiel-/Platzhalterinhalte.

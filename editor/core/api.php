@@ -44,7 +44,7 @@ try {
   session_regenerate_id(true); $_SESSION['epoch']=$state['admin']['epoch'];$_SESSION['started']=$_SESSION['active']=time();$_SESSION['csrf']=bin2hex(random_bytes(32));respond(200,['ok'=>true]);
  }
  if(!editor_authenticated($state))respond(401,['error'=>'Bitte erneut anmelden.']); $_SESSION['active']=time();
- if($action==='logout'){$_SESSION=[];session_destroy();setcookie(session_name(),'', ['expires'=>time()-3600,'path'=>'/','secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']);respond(200,['ok'=>true]);}
+ if($action==='logout'){$_SESSION=[];session_destroy();setcookie(session_name(),'', ['expires'=>time()-3600,'path'=>editor_url('/'),'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','httponly'=>true,'samesite'=>'Strict']);respond(200,['ok'=>true]);}
  if($action==='password'){
   if(!password_verify((string)($input['current']??''),$state['admin']['hash']))respond(422,['error'=>'Bisheriges Passwort stimmt nicht.']);
   $password=$input['password']??'';if(!is_string($password)||strlen($password)<14||strlen($password)>72)respond(422,['error'=>'Neues Passwort: 14 Zeichen bis maximal 72 Bytes.']);

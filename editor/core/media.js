@@ -1,5 +1,6 @@
 (async () => {
  'use strict';
+ const uploadEndpoint=new URL('upload.php',document.currentScript.src).href;
  const editor=window.siteEditor;if(!editor)return;await editor.ready;
  const state=editor.getState();if(!state?.authenticated||document.querySelector('#admin-login'))return;
  const {node,dialog,message,closeButton,send}=editor;
@@ -17,7 +18,7 @@
   function update(){if(blob)URL.revokeObjectURL(blob);blob=null;select.disabled=file.files.length>0;if(file.files.length){const f=file.files[0];if(f.size>state.uploadLimit){status.textContent='Dieses Bild ist zu groß.';return;}blob=URL.createObjectURL(f);preview.src=blob;}else preview.src=select.value;preview.alt=alt.value;status.textContent='';}
   file.onchange=update;select.onchange=update;alt.oninput=()=>{preview.alt=alt.value;};d.addEventListener('close',()=>{if(blob)URL.revokeObjectURL(blob);});
   const publish=buttons(form,d,status,()=>({scope:'image',id}),{label:'Originalbild wiederherstellen',question:'Das ursprüngliche Bild wiederherstellen?'});
-  form.onsubmit=async event=>{event.preventDefault();publish.disabled=true;try{let src=select.value;if(file.files.length){const body=new FormData();body.append('csrf',state.csrf);body.append('image',file.files[0]);const response=await fetch('/site-editor/upload.php',{method:'POST',body});const result=await response.json();if(!response.ok)throw Error(result.error||'Upload fehlgeschlagen.');src=result.asset.src;state.gallery.push(result.asset);}await save(d,status,{scope:'image',id,src,alt:alt.value});}catch(error){status.textContent=error.message;publish.disabled=false;}};
+  form.onsubmit=async event=>{event.preventDefault();publish.disabled=true;try{let src=select.value;if(file.files.length){const body=new FormData();body.append('csrf',state.csrf);body.append('image',file.files[0]);const response=await fetch(uploadEndpoint,{method:'POST',body});const result=await response.json();if(!response.ok)throw Error(result.error||'Upload fehlgeschlagen.');src=result.asset.src;state.gallery.push(result.asset);}await save(d,status,{scope:'image',id,src,alt:alt.value});}catch(error){status.textContent=error.message;publish.disabled=false;}};
   d.showModal();
  }
  function linkDialog(link){

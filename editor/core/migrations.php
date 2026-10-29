@@ -25,3 +25,18 @@ function editor_migrate_state(array $state): array {
     if(($state['schema']??null)!==$release['dataSchema'])throw new RuntimeException('Missing editor migration');
     return $state;
 }
+
+// Content paths stay installation-relative so moving a site needs no data migration.
+function editor_url(string $path): string {
+ $base=editor_config()['basePath']??'';
+ if($base===''||!str_starts_with($path,'/')||str_starts_with($path,'//')||$path===$base||str_starts_with($path,$base.'/'))return $path;
+ return $base.$path;
+}
+function editor_request_path(): string {
+ $path=parse_url($_SERVER['REQUEST_URI']??'/',PHP_URL_PATH);$base=editor_config()['basePath']??'';
+ if($base!==''&&($path===$base||str_starts_with($path,$base.'/')))$path=substr($path,strlen($base))?:'/';
+ return $path;
+}
+function editor_public_html(string $html): string {
+ return preg_replace_callback('~((?:href|src|action)=["\'])(/[^"\']*)~',fn($m)=>$m[1].editor_url($m[2]),$html);
+}

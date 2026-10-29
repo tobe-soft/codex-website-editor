@@ -3,7 +3,8 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {createHash,randomBytes} from 'node:crypto';
 const base=process.env.EDITOR_TEST_URL||'http://127.0.0.1:8766';
-if(!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(base))throw Error('Tests only run against local fixtures');
+if(!/^http:\/\/(127\.0\.0\.1|localhost):\d+(?:\/[a-z0-9-]+)*$/.test(base))throw Error('Tests only run against local fixtures');
+const prefix=new URL(base).pathname.replace(/\/$/,'');
 await fs.mkdir('.editor-tools',{recursive:true});
 const state='dist/site-editor/storage/state.php',bootstrap='dist/site-editor/bootstrap.php';
 const saved=await Promise.all([state,bootstrap].map(p=>fs.readFile(p).catch(e=>{if(e.code==='ENOENT')return null;throw e})));
@@ -13,7 +14,7 @@ let browser;
 try{
  await fs.rm(state,{force:true});await fs.writeFile(bootstrap,"<?php return '"+createHash('sha256').update(key).digest('hex')+"';");
  browser=await chromium.launch({headless:true});const context=await browser.newContext();const page=await context.newPage();
- const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const errors=[];const escaped=[];page.on('request',r=>{const u=new URL(r.url());if(prefix&&u.origin===new URL(base).origin&&u.pathname!==prefix&&!u.pathname.startsWith(prefix+'/'))escaped.push(u.pathname);});page.on('pageerror',e=>errors.push(e.message));
  await page.goto(base);await assert.equal(await page.locator('h1').innerText(),'Gemeinsam wird aus Ihrer Idee etwas Gutes.');
  await page.screenshot({path:'.editor-tools/desktop.png',fullPage:true});
  const api=async data=>{const r=await context.request.post(base+'/site-editor/api.php',{data});return {status:r.status(),body:await r.json()}};
@@ -32,11 +33,11 @@ try{
  const dialog=page.locator('dialog[open]');await assert.equal(await dialog.count(),1);assert.ok(await dialog.locator('select:disabled').count());await page.keyboard.press('Escape');
  await publish({scope:'link',id:'contact.email',href:'mailto:team@example.invalid',newTab:false,text:'Team kontaktieren'});
  await page.goto(base+'/kontakt/');assert.equal(await page.locator('a[data-edit-link="contact.email"]').getAttribute('href'),'mailto:team@example.invalid');
- await publish({scope:'image',id:'brand.logo',src:'/images/space.svg',alt:'Neues Testlogo'});
- await page.reload();assert.equal(await page.locator('[data-edit-image="brand.logo"]').getAttribute('src'),'/images/space.svg');
+ await publish({scope:'image',id:'brand.logo',src:prefix+'/images/space.svg',alt:'Neues Testlogo'});
+ await page.reload();assert.equal(await page.locator('[data-edit-image="brand.logo"]').getAttribute('src'),prefix+'/images/space.svg');
  s=await get();
  const bad=await context.request.post(base+'/site-editor/upload.php',{multipart:{csrf:s.csrf,image:{name:'bad.php',mimeType:'image/png',buffer:Buffer.from('<?php echo 1;')}}});assert.equal(bad.status(),422);
- const upload=await context.request.post(base+'/site-editor/upload.php',{multipart:{csrf:s.csrf,image:{name:'fixture.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aRZkAAAAASUVORK5CYII=','base64')}}});assert.equal(upload.status(),200,await upload.text());const uploaded=await upload.json();createdUploads.push('dist'+uploaded.asset.src);
+ const upload=await context.request.post(base+'/site-editor/upload.php',{multipart:{csrf:s.csrf,image:{name:'fixture.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aRZkAAAAASUVORK5CYII=','base64')}}});assert.equal(upload.status(),200,await upload.text());const uploaded=await upload.json();createdUploads.push('dist'+uploaded.asset.src.slice(prefix.length));
  await publish({scope:'image',id:'home.hero',src:uploaded.asset.src,alt:'Neues Testbild'});
  s=await get();assert.ok(s.gallery.some(a=>a.src===uploaded.asset.src));
 
@@ -44,7 +45,7 @@ try{
  await publish({scope:'global',id:'p',style:{size:19}});
  await publish({scope:'menu',menu:{design:'rounded',fontSize:16,gap:18,border:1,radius:12}});
  s=await get();const pages=[...s.pages,{id:'page-1234567890abcdef',path:'/testseite/',name:'Testseite',showInMenu:false,showInFooter:true,intro:'Testeinleitung',body:'Testinhalt'}];
- await publish({scope:'pages',pages});await page.goto(base+'/testseite/');assert.equal(await page.locator('h1').innerText(),'Testseite');assert.ok(await page.locator('footer nav a[href="/testseite/"]').count());assert.equal(await page.locator('.desktop-nav a[href="/testseite/"]').count(),0);
+ await publish({scope:'pages',pages});await page.goto(base+'/testseite/');assert.equal(await page.locator('h1').innerText(),'Testseite');assert.ok(await page.locator('footer nav a[href="'+prefix+'/testseite/"]').count());assert.equal(await page.locator('.desktop-nav a[href="'+prefix+'/testseite/"]').count(),0);
  pages.at(-1).name='Neuer Seitenname';await publish({scope:'pages',pages});await page.reload();assert.match(await page.title(),/Neuer Seitenname/);
  s=await get();assert.equal((await api({action:'publish',revision:s.revision,csrf:s.csrf,scope:'pages',pages:s.pages.filter(p=>p.path!=='/')})).status,422);
  await publish({scope:'pages',pages:pages.slice(0,-1)});assert.equal((await page.goto(base+'/testseite/')).status(),404);
@@ -55,9 +56,8 @@ try{
  s=await get();assert.equal((await api({action:'password',csrf:s.csrf,current:'Test-only-password-2026',password:'Changed-test-password-2026'})).status,200);
  s=await get();await api({action:'logout',csrf:s.csrf});
  await page.goto(base);await page.setViewportSize({width:390,height:844});await page.screenshot({path:'.editor-tools/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
- await page.locator('.mobile-nav summary').click();assert.ok(await page.locator('.mobile-nav nav a[href="/kontakt/"]').isVisible());
+ await page.locator('.mobile-nav summary').click();assert.ok(await page.locator('.mobile-nav nav a[href="'+prefix+'/kontakt/"]').isVisible());
  for(const path of ['/ueber-uns/','/leistungen/','/kontakt/','/impressum/','/datenschutz/'])assert.equal((await page.goto(base+path)).status(),200);
  for(const path of ['/site-editor/bootstrap.php','/site-editor/storage/state.php'])assert.equal((await context.request.get(base+path)).status(),403);
- assert.deepEqual(errors,[]);console.log('PASS: setup, CSRF, login, text/style, revision conflict, global styles, menus, page create/rename/delete/restore, homepage protection, logout, routes, mobile layout, storage protection.');
+ assert.deepEqual(errors,[]);assert.deepEqual(escaped,[],'Requests must remain inside basePath');console.log('PASS: setup, CSRF, login, text/style, revision conflict, global styles, menus, page create/rename/delete/restore, homepage protection, logout, routes, mobile layout, storage protection.');
 }finally{await browser?.close();for(const p of createdUploads)await fs.rm(p,{force:true});for(let i=0;i<2;i++){const p=[state,bootstrap][i];if(saved[i]===null)await fs.rm(p,{force:true});else await fs.writeFile(p,saved[i]);}}
-

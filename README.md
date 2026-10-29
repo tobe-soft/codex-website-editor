@@ -93,7 +93,7 @@ ersetzen weder FTPS-Zugang noch die Prüfung der Apache-Konfiguration.
 
 ## Gemeinsamer Core und Updates
 
-`editor/core/` ist der versionierte gemeinsame Core (1.0.0, Datenformat 2,
+`editor/core/` ist der versionierte gemeinsame Core (1.1.0, Datenformat 2,
 Integration 1). `editor/core.lock.json` fixiert dessen geprüfte Prüfsummen.
 Websitegestaltung und Inhalte liegen außerhalb des Cores. Neue Core-Releases
 müssen ihre Version erhöhen und Migrationen erhalten.
@@ -135,3 +135,17 @@ Die neutrale Website, Integration und Werkzeuge wurden am 29.10.2026 erweitert.
 Vor öffentlicher Nutzung muss das Quellcodeangebot auf den konkreten,
 tatsächlich veröffentlichten Stand zeigen. Keine öffentliche ZIP-Datei mit
 privaten Websitequellen, Daten, Uploads oder Zugangsdaten auf dem Webspace erzeugen.
+
+## Installation unter einem Unterpfad
+
+Optional `basePath` in `site.config.json` setzen, zum Beispiel `/codex` (ohne
+abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.1.0
+unterstützt die bisherige Domainwurzel weiter unverändert; Datenformat 2 und
+Integration 1 bleiben kompatibel. Seitenadressen in Inhaltsdaten bleiben relativ
+zur Installation. Für eine lokale, nicht versionierte Hostingkonfiguration kann
+`SITE_CONFIG_PATH` auf eine Datei unter `.local/` zeigen. Build und Publisher
+müssen dieselbe Konfiguration verwenden. Zugangsdaten nur über stdin übergeben.
+
+Ein realer Erstinstallations- und Update-Test unter einem Unterpfad wurde mit
+PHP 8.3 durchgeführt: Anmeldung, Veröffentlichung, neue Seiten, Bild-Upload,
+Speicherschutz und Erhalt von Adminzugang/Inhalten/Medien bestanden.

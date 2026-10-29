@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 function editor_attributes(array $attributes): string {
-    $result='';foreach($attributes as $name=>$value)$result.=' '.$name.'="'.htmlspecialchars((string)$value,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8').'"';return $result;
+    $result='';foreach(['href','src'] as $key)if(isset($attributes[$key]))$attributes[$key]=editor_url($attributes[$key]);foreach($attributes as $name=>$value)$result.=' '.$name.'="'.htmlspecialchars((string)$value,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8').'"';return $result;
 }
 function editor_attr_map(array $attributes): array { $result=[];foreach($attributes as $attr)$result[$attr['name']]=$attr['value'];return $result; }
 function editor_gallery(): array {

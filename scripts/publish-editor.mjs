@@ -6,11 +6,12 @@ import {Client} from 'basic-ftp';
 import {publishTransaction} from './editor-publish-transaction.mjs';
 import {readCore,makeLock} from './editor-package.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
-const site=JSON.parse(await fs.readFile('site.config.json','utf8'));
+const {readSiteConfig}=await import('../editor/core/config.mjs');
+const site=await readSiteConfig();
 if(new URL(site.origin).hostname.endsWith('.invalid'))throw Error('Configure the real HTTPS origin before publishing');
 const core=makeLock(await readCore('editor/core'));if(JSON.stringify(core)!==JSON.stringify(JSON.parse(await fs.readFile('editor/core.lock.json','utf8'))))throw Error('Unreviewed core changes');
 const built=JSON.parse(await fs.readFile('dist/site-editor/installation.json','utf8'));
-if(built.siteId!==site.id||built.origin!==site.origin||built.coreVersion!==core.version)throw Error('Build is stale; rebuild first');
+if(built.siteId!==site.id||built.origin!==site.origin||(built.basePath??'')!==site.basePath||built.coreVersion!==core.version)throw Error('Build is stale; rebuild first');
 console.log('Ready for publishing JSON on stdin (host, user, password, remoteRoot, mode: probe/install/update).');
 let input='';for await(const chunk of process.stdin){input+=chunk;if(input.length>16384)throw Error('Input too large');}
 const options=JSON.parse(input);input='';
@@ -24,14 +25,14 @@ try{
  const listing=await ftp.list();const existing=listing.find(e=>e.name==='site-editor');
  let installation=null;
  if(existing){try{installation=JSON.parse((await remote('site-editor/installation.json')).toString('utf8'));}catch{throw Error('Unknown installation: refusing to overwrite');}}
- if(installation&&(installation.system!==built.system||installation.siteId!==site.id||installation.origin!==site.origin||installation.integrationVersion!==built.integrationVersion||installation.dataSchema>built.dataSchema))throw Error('Installation identity or compatibility mismatch');
+ if(installation&&(installation.system!==built.system||installation.siteId!==site.id||installation.origin!==site.origin||(installation.basePath??'')!==site.basePath||installation.integrationVersion!==built.integrationVersion||installation.dataSchema>built.dataSchema))throw Error('Installation identity or compatibility mismatch');
  if(options.mode==='install'&&listing.length)throw Error('First installation requires an empty dedicated target directory');
  if(options.mode==='update'&&!installation)throw Error('No matching installation found; refusing update');
  if(options.mode==='probe'){console.log(JSON.stringify({connected:true,matchingInstallation:!!installation,empty:listing.length===0}));process.exitCode=0;}
  else{
  // Verify the FTPS directory actually serves the configured HTTPS origin.
  const challenge=randomBytes(24).toString('hex'),name='editor-check-'+randomBytes(12).toString('hex')+'.php';
- try{await ftp.uploadFrom(Readable.from("<?php header('Content-Type: text/plain'); echo '"+challenge+"';"),target(name));const response=await fetch(site.origin+'/'+name,{redirect:'error',signal:AbortSignal.timeout(15000)});if(!response.ok||await response.text()!==challenge)throw Error('Domain does not serve the selected FTPS directory');}finally{await ftp.remove(target(name),true);}
+ try{await ftp.uploadFrom(Readable.from("<?php header('Content-Type: text/plain'); echo '"+challenge+"';"),target(name));const response=await fetch(site.origin+site.basePath+'/'+name,{redirect:'error',signal:AbortSignal.timeout(15000)});if(!response.ok||await response.text()!==challenge)throw Error('Domain does not serve the selected FTPS directory');}finally{await ftp.remove(target(name),true);}
  const backup=path.resolve('.local/backups/'+new Date().toISOString().replaceAll(':','-'));await fs.mkdir(backup,{recursive:true});
  const previous={verification:[]};
  async function snapshot(dir=''){

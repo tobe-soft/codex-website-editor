@@ -19,6 +19,6 @@ $lock=fopen(dirname(editor_path()).'/lock.php','c+');if(!$lock||!flock($lock,LOC
 try{
     $state=editor_read();if(!editor_authenticated($state))upload_reply(401,['error'=>'Bitte erneut anmelden.']);
     if(!move_uploaded_file($file['tmp_name'],$path))throw new RuntimeException('Upload move failed');chmod($path,0644);
-    $src='/site-editor/uploads/'.$name;$asset=['src'=>$src,'label'=>substr(preg_replace('/[\x00-\x1f\x7f]/','',basename($file['name'])),0,160),'width'=>$size[0],'height'=>$size[1]];
+    $src=editor_url('/site-editor/uploads/'.$name);$asset=['src'=>$src,'label'=>substr(preg_replace('/[\x00-\x1f\x7f]/','',basename($file['name'])),0,160),'width'=>$size[0],'height'=>$size[1]];
     $state['assets'][$src]=$asset;editor_write($state);$_SESSION['active']=time();upload_reply(200,['asset'=>$asset]);
 }catch(Throwable $e){if(is_file($path))unlink($path);error_log('Image upload: '.$e->getMessage());upload_reply(500,['error'=>'Bild konnte nicht gespeichert werden.']);}

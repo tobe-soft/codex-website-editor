@@ -24,3 +24,10 @@ jobs:
           php -S 127.0.0.1:8766 -t dist scripts/dev-router.php > /tmp/editor-php.log 2>&1 &
           for i in 1 2 3 4 5; do curl -fsS http://127.0.0.1:8766/ && break || sleep 1; done
           npm run test:editor
+      - name: Verify subdirectory installation
+        run: |
+          node -e "const fs=require('fs');fs.writeFileSync('.editor-tools/basepath.json',JSON.stringify({...require('./site.config.json'),basePath:'/nested/test'}))"
+          SITE_CONFIG_PATH=.editor-tools/basepath.json npm run build
+          php -S 127.0.0.1:8769 -t dist scripts/dev-router.php > /tmp/editor-subpath.log 2>&1 &
+          for i in 1 2 3 4 5; do curl -fsS http://127.0.0.1:8769/nested/test/ && break || sleep 1; done
+          EDITOR_TEST_URL=http://127.0.0.1:8769/nested/test npm run test:editor
