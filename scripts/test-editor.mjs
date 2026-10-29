@@ -55,9 +55,23 @@ try{
   assert.equal(await page.locator('footer').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.footer));
   assert.equal(s.blocks['home.heading'].text,'Unser neutraler Funktionstest');assert.equal(s.blocks['home.heading'].style.size,42);assert.equal(s.blocks['home.heading'].style.color,undefined);assert.equal(s.globals.p.size,19);
   if(theme==='yellow')assert.match(await page.locator('[data-edit-id="home.heading"]').evaluate(e=>getComputedStyle(e).fontFamily),/Georgia/);
-  await page.screenshot({path:'.editor-tools/theme-'+theme+'.png',fullPage:true});
+
+  for(const design of ['plain','rounded']){
+   await publish({scope:'menu',menu:{design,fontSize:16,gap:18,border:1,radius:12}});await page.goto(base);await page.mouse.move(0,0);
+   const normal=page.locator('.desktop-nav a:not([aria-current])').first(),active=page.locator('.desktop-nav a[aria-current]');
+   assert.equal(await normal.evaluate(e=>getComputedStyle(e).color),rgb(design==='plain'?c.link:c.onAccent));
+   assert.equal(await normal.evaluate(e=>getComputedStyle(e).backgroundColor),design==='plain'?'rgba(0, 0, 0, 0)':rgb(c.accent));
+   assert.equal(await active.evaluate(e=>getComputedStyle(e).color),rgb(c.link));
+   if(design==='rounded')assert.equal(await active.evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.active));
+   await normal.hover();assert.equal(await normal.evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.active));assert.equal(await normal.evaluate(e=>getComputedStyle(e).color),rgb(c.link));
+   await page.setViewportSize({width:390,height:844});await page.mouse.move(0,0);await page.locator('.mobile-nav summary').click();await page.mouse.move(0,0);
+   const mobile=page.locator('.mobile-nav nav a:not([aria-current])').first();assert.ok(await mobile.isVisible());assert.equal(await mobile.evaluate(e=>getComputedStyle(e).color),rgb(design==='plain'?c.link:c.onAccent));assert.equal(await page.locator('.mobile-nav nav').evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.surface));
+   await page.locator('.mobile-nav summary').click();await page.setViewportSize({width:1280,height:720});
+   await page.goto(base+'/site-editor/');const preview=page.locator('.editor-menu-preview');assert.equal(await preview.evaluate(e=>getComputedStyle(e).backgroundColor),rgb(c.surface));const previewItem=preview.locator('span').nth(1);assert.equal(await previewItem.evaluate(e=>getComputedStyle(e).color),rgb(design==='plain'?c.link:c.onAccent));
+  }
+  await page.goto(base);await page.screenshot({path:'.editor-tools/theme-'+theme+'.png',fullPage:true});
  }
- s=await get();assert.equal((await api({action:'publish',csrf:s.csrf,revision:s.revision,scope:'theme',theme:'invalid'})).status,422);
+ await publish({scope:'theme',theme:'yellow'});await publish({scope:'theme',theme:'dark'});s=await get();assert.equal((await api({action:'publish',csrf:s.csrf,revision:s.revision,scope:'theme',theme:'invalid'})).status,422);
  assert.equal((await api({action:'restore',csrf:s.csrf,revision:s.revision})).status,200);assert.equal((await get()).theme,'yellow');
  await page.goto(base+'/site-editor/');await page.locator('#admin-themes input[value="blue"]').check();await page.locator('#admin-themes button[type="submit"]').click();await page.locator('.editor-theme-current').filter({hasText:'Atlantik'}).waitFor();assert.equal((await get()).theme,'blue');await page.locator('#admin-themes').screenshot({path:'.editor-tools/admin-themes.png'});
  await publish({scope:'menu',menu:{design:'rounded',fontSize:16,gap:18,border:1,radius:12}});

@@ -1,5 +1,12 @@
 # Änderungen
 
+## 0.4.1 – 29.10.2026
+
+- Core 1.3.1: Beide Menüvarianten folgen dem Farbkonzept einschließlich
+  Buttonflächen, Text, Rändern, Hover, aktiver Seite und mobilem Menü.
+- Die Menüvorschau im Adminbereich verwendet die gleichen Farben und Schriften.
+
+
 ## 0.4.0 – 29.10.2026
 
 - Core 1.3.0: Vier vollständige Farb-/Schriftkonzepte mit Admin-Vorschau.
