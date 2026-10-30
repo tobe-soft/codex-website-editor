@@ -1,5 +1,15 @@
 # Änderungen
 
+## 0.5.0 – 30.10.2026
+
+- Core 1.4.0: Verwaltung mit Bereichen Seiten, Gestaltung, Sicherung und Zugang.
+- Kompakte Seitenzeilen mit aufklappbaren Details und Dreipunktmenüs.
+- Schmale Frontend-Leiste mit Bearbeiten, Vorschau und Verwaltung; Stifte bei Hover/Fokus.
+- Individuelle Gestaltung und Rücksetzen in aufklappbaren Optionen, klare Aktionshierarchie.
+- JSON-Sicherung ausschließlich im Backend als Texte und Einstellungen sichern.
+- Browserprüfungen für Navigation, Entwürfe, Vorschau, Dialoge und mobile Darstellung.
+
+
 ## 0.4.2 – 29.10.2026
 
 - Atlantik erhält ruhigeres Marineblau und gedämpfte Graublautöne, angelehnt an

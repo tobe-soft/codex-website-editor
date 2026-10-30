@@ -3,10 +3,11 @@
  const uploadEndpoint=new URL('upload.php',document.currentScript.src).href;
  const editor=window.siteEditor;if(!editor)return;await editor.ready;
  const state=editor.getState();if(!state?.authenticated||document.querySelector('#admin-login'))return;
- const {node,dialog,message,closeButton,send}=editor;
+ const {node,dialog,message,closeButton,registerMarker,send}=editor;
  function input(form,title,type='text'){const label=node('label',title),control=node('input',null,{type});label.append(control);form.append(label);return control;}
  async function save(d,status,data){try{await send('publish',{revision:state.revision,...data});location.reload();}catch(error){status.textContent=error.message;d.querySelectorAll('button').forEach(b=>b.disabled=false);}}
- function buttons(form,d,status,data,reset){const publish=node('button','Veröffentlichen',{type:'submit'});form.append(status,publish);if(reset){const b=node('button',reset.label,{type:'button'});b.onclick=()=>{if(confirm(reset.question))save(d,status,{...data(),reset:true});};form.append(b);}form.append(closeButton(d));return publish;}
+ function buttons(form,d,status,data,reset){const publish=node('button','Veröffentlichen',{type:'submit'});form.append(status);if(reset){const more=node('details',null,{class:'editor-more-options'});more.append(node('summary','Weitere Optionen'));const b=node('button',reset.label,{type:'button',class:'editor-danger-link'});b.onclick=()=>{if(confirm(reset.question))save(d,status,{...data(),reset:true});};more.append(b);form.append(more);}const actions=node('div',null,{class:'editor-form-actions'});actions.append(publish,closeButton(d));form.append(actions);return publish;}
+
  function imageDialog(image){
   const id=image.dataset.editImage,d=dialog('Bild bearbeiten'),form=node('form');d.append(form,node('p','Das Bild wird erst mit „Veröffentlichen“ ersetzt.'));
   const label=node('label','Bild auswählen'),select=node('select',null,{'aria-label':'Bild auswählen'});label.append(select);form.append(label);
@@ -39,11 +40,11 @@
   form.onsubmit=event=>{event.preventDefault();publish.disabled=true;save(d,status,{scope:'link',id,href:href(),newTab:!newTab.disabled&&newTab.checked,...(text&&text.value!==initialText?{text:text.value}:{})});};d.showModal();
  }
  const markers=[];
- function add(element,kind,id,handler){const b=node('button',kind==='image'?'✎':'✎↗',{type:'button',class:'editor-pencil editor-media-pencil','aria-label':kind==='image'?'Bild bearbeiten: '+(element.alt||id):'Link bearbeiten: '+(element.textContent.trim().slice(0,55)||id)});b.setAttribute('data-edit-'+kind+'-for',id);b.onclick=e=>{e.preventDefault();handler(element);};document.body.append(b);markers.push({element,b,kind});}
+ function add(element,kind,id,handler){const b=node('button',kind==='image'?'✎':'✎↗',{type:'button',class:'editor-pencil editor-media-pencil','aria-label':kind==='image'?'Bild bearbeiten: '+(element.alt||id):'Link bearbeiten: '+(element.textContent.trim().slice(0,55)||id)});b.setAttribute('data-edit-'+kind+'-for',id);b.onclick=e=>{e.preventDefault();handler(element);};document.body.append(b);registerMarker(element,b);markers.push({element,b,kind});}
  document.querySelectorAll('img[data-edit-image]').forEach(el=>add(el,'image',el.dataset.editImage,imageDialog));
  document.querySelectorAll('a[data-edit-link]').forEach(el=>add(el,'link',el.dataset.editLink,linkDialog));
  let queued=false;
  function position(){queued=false;for(const{element,b,kind}of markers){const rect=element.getBoundingClientRect();b.hidden=!element.getClientRects().length||rect.width===0||rect.height===0;if(b.hidden)continue;const offset=kind==='link'?(element.querySelectorAll('[data-edit-id]').length===1?100:62):20;b.style.left=Math.max(0,Math.min(innerWidth-40,rect.right-offset))+scrollX+'px';b.style.top=Math.max(0,rect.top+scrollY-18)+'px';}}
  function schedule(){if(!queued){queued=true;requestAnimationFrame(position);}}
- const observer=new ResizeObserver(schedule);markers.forEach(({element})=>observer.observe(element));addEventListener('resize',schedule);addEventListener('scroll',schedule,{passive:true});document.addEventListener('toggle',schedule,true);position();
+ const observer=new ResizeObserver(schedule);markers.forEach(({element})=>observer.observe(element));addEventListener('resize',schedule);addEventListener('scroll',schedule,{passive:true});document.addEventListener('toggle',schedule,true);document.addEventListener('editor-mode-change',schedule);position();
 })();

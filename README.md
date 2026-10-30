@@ -87,7 +87,7 @@ ersetzen weder FTPS-Zugang noch die Prüfung der Apache-Konfiguration.
 
 ## Gemeinsamer Core und Updates
 
-`editor/core/` ist der versionierte gemeinsame Core (1.3.2, Datenformat 2,
+`editor/core/` ist der versionierte gemeinsame Core (1.4.0, Datenformat 2,
 Integration 1). `editor/core.lock.json` fixiert dessen geprüfte Prüfsummen.
 Websitegestaltung und Inhalte liegen außerhalb des Cores. Neue Core-Releases
 müssen ihre Version erhöhen und Migrationen erhalten.
@@ -133,7 +133,7 @@ privaten Websitequellen, Daten, Uploads oder Zugangsdaten auf dem Webspace erzeu
 ## Installation unter einem Unterpfad
 
 Optional `basePath` in `site.config.json` setzen, zum Beispiel `/codex` (ohne
-abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.3.2
+abschließenden Slash). `origin` bleibt die reine HTTPS-Domain. Der Core 1.4.0
 unterstützt die bisherige Domainwurzel weiter unverändert; Datenformat 2 und
 Integration 1 bleiben kompatibel. Seitenadressen in Inhaltsdaten bleiben relativ
 zur Installation. Für eine lokale, nicht versionierte Hostingkonfiguration kann
@@ -159,3 +159,9 @@ blendet die Auswahl bis zu dieser ausdrücklichen Anbindung aus. Ein reines
 Core-Update verändert deshalb keine bestehende Kundengestaltung.
 
 Recherche und Entwurfsentscheidungen: docs/FARBKONZEPTE.md.
+
+## Übersichtliche Verwaltung
+
+Die Verwaltung gliedert sich in Seiten, Gestaltung, Sicherung und Zugang. Unter Gestaltung stehen Farbkonzept, Menü und Schrift bereit. Seiten werden kompakt dargestellt; Bearbeiten öffnet Details, das Dreipunktmenü enthält Sortieren und Löschen. Im Frontend schaltet die schmale Leiste zwischen Bearbeiten und Vorschau um. Individuelle Textgestaltung und Rücksetzen liegen in aufklappbaren Optionen.
+
+Unter Sicherung lässt sich mit **Texte und Einstellungen sichern** eine JSON-Datei herunterladen. Sie enthält keine Bilddateien. Im Frontend gibt es keinen Downloadbutton mehr.

@@ -76,3 +76,5 @@ einem Unterpfad mit Installation, funktionalem Editor und technischem Update
 unter Datenerhalt wurde erfolgreich geprüft. Individuelle Hostingkonfiguration
 und Zugangsdaten bleiben außerhalb von Git.
 Rechtliche Texte und Kontaktdaten sind ausdrücklich Beispiel-/Platzhalterinhalte.
+
+Stand 30.10.2026: Vorlage 0.5.0, Core 1.4.0. Gegliederte Verwaltung mit kompakten Seitenzeilen, Gestaltung-Unterbereichen und eigener Sicherung/Zugang. Frontend mit Bearbeiten/Vorschau; JSON-Sicherung nur im Backend. Datenformat 2 und Integration 1 bleiben erhalten.
