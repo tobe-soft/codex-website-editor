@@ -1,5 +1,11 @@
 # Herkunft
 
+Diese Vorlage ist eine Weiterentwicklung von **codex-website** von
+**David (david-loe)**: https://github.com/david-loe/codex-website.
+Vielen Dank an David für den Website-Starter und seine offene Bereitstellung.
+Die zusätzlichen Editorfunktionen werden hier eigenständig gepflegt.
+Der nachvollziehbare Vergleich steht in docs/HERKUNFT-UND-KONZEPT.md.
+
 - Ausgangspunkt: https://github.com/david-loe/codex-website (david-loe),
   Astro/TypeScript/Tailwind-Starter unter GNU AGPL Version 3; LICENSE erhalten.
 - Gemeinsamer Astro/PHP-Frontend-Editor: übernommen als Core 1.0.0 mit

@@ -1,8 +1,25 @@
 # Codex Website Editor
 
 Astro-Vorlage mit PHP-Frontend-Editor für klassisches Shared Hosting. Auf dem
-Webspace wird kein Node-Server benötigt. Dies ist ein eigenständiges Projekt
-auf Basis von [david-loe/codex-website](https://github.com/david-loe/codex-website).
+Webspace wird kein Node-Server benötigt.
+
+Diese Vorlage ist eine **Weiterentwicklung von
+[david-loe/codex-website](https://github.com/david-loe/codex-website)**, entwickelt
+von [David (david-loe)](https://github.com/david-loe). Sein Website-Starter bildet
+den Ausgangspunkt dieses Projekts. Vielen Dank an David für die Vorarbeit und
+die offene Bereitstellung unter der AGPL-3.0!
+
+Hier hinzugekommen sind die Editor-Anbindung, die Pflege über den Browser und
+die darauf abgestimmten Installations- und Updatewerkzeuge. Diese Erweiterungen
+werden eigenständig gepflegt; sie sind keine offizielle Veröffentlichung Davids.
+Der [Herkunfts- und Konzeptvergleich](docs/HERKUNFT-UND-KONZEPT.md) erläutert den Aufbau.
+
+**Codex gestaltet die Website, der Editor übernimmt die alltägliche Pflege.**
+Layout, Aufbau, Animationen und neue Funktionen entstehen über Codex-Aufträge.
+Texte, Bilder und Links bleiben im Browser bearbeitbar. Die vorhandenen
+Editor-Einstellungen setzen keine starre Designgrenze.
+
+Zum Einstieg: [Kurzanleitung für Erstellung und Pflege](docs/KURZANLEITUNG.md).
 
 ## Mit Codex starten
 
@@ -122,8 +139,9 @@ Menüs, Seitenverwaltung, Wiederherstellung, Mobilansicht und Speicherzugriff.
 
 ## Herkunft und Lizenz
 
-Der Astro-Ausgangspunkt stammt von david-loe/codex-website und steht unter
-AGPL-3.0. Die vollständige übernommene Lizenz steht in `LICENSE`.
+Der Astro-Ausgangspunkt stammt von David (david-loe), Projekt
+[codex-website](https://github.com/david-loe/codex-website), und steht unter
+AGPL-3.0. Die vollständige übernommene Lizenz steht in `LICENSE` und bleibt erhalten.
 Die neutrale Website, Integration und Werkzeuge wurden am 29.10.2026 erweitert.
 `THIRD-PARTY-NOTICES.md` beschreibt Herkunft und die Trennung privater Daten.
 Vor öffentlicher Nutzung muss das Quellcodeangebot auf den konkreten,

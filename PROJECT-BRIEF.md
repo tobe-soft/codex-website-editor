@@ -7,14 +7,22 @@ auf Basis von david-loe/codex-website und dem vorhandenen Frontend-Editor.
 Die Vorlage enthält funktionsfähigen Programmcode und klare Codex-Anweisungen.
 Der Schwerpunkt ist eine schnelle, einfache Website-Erstellung und Pflege.
 
+Codex übernimmt grundlegendes Design, Aufbau, neue Bereiche, Animationen und
+Funktionen. Der Browser-Editor übernimmt die alltägliche Pflege von Texten,
+Bildern und Links sowie vorhandenen Einstellungen. Individuelle Gestaltung ist
+nicht auf die Editoroptionen begrenzt; pflegbare Inhalte bleiben an den Editor
+angebunden. Zusätzliche Einstellungen entstehen bei tatsächlichem Pflegebedarf.
+Verbindliche Arbeitsregeln dazu stehen in AGENTS.md, die Nutzeranleitung in
+docs/KURZANLEITUNG.md. Davids Ursprungsprojekt und dessen Beitrag werden sichtbar
+gewürdigt; docs/HERKUNFT-UND-KONZEPT.md dokumentiert Gemeinsamkeiten und Abweichungen.
+
 Beim Start mit Codex zwei Wege anbieten:
 1. Website anhand einer vom Anwender genannten Referenz gestalten.
 2. Eine neutrale Standardwebsite erstellen und individuell anpassen.
 
 Zweck, Inhalte, Gestaltung und notwendige Hostingangaben gezielt erfragen.
 Zugangsdaten erst erfragen, wenn Hosting tatsächlich benötigt wird.
-Die feste Testwebsite mit drei Seiten ist vorerst zurückgestellt.
-Standarddesign und Seitenumfang werden im neuen Chat besprochen.
+Standarddesign und Seitenumfang werden je Websiteprojekt besprochen.
 
 ## Vorhandene Funktionen erhalten
 
@@ -69,7 +77,7 @@ Bestätigte Gestaltung: helle Website mit grüner Akzentfarbe; Start, Über uns,
 Leistungen, Kontakt sowie Impressum und Datenschutz im Footer. Standardseiten,
 page-template.astro, Erstinstallation, allgemeiner FTPS-Publisher und neutrale
 PHP-/Browser-/Migrationstests sind ergänzt. Die Tests prüfen auch Core-Updates,
-Datenerhalt und Rücksicherung. Der gemeinsame Core bleibt bei 1.1.0 mit kompatibler Unterpfad-Unterstützung.
+Datenerhalt und Rücksicherung. Der damalige Core war 1.1.0 mit kompatibler Unterpfad-Unterstützung.
 
 GitHub wurde als private Vorlage veröffentlicht. Ein realer Hostinglauf unter
 einem Unterpfad mit Installation, funktionalem Editor und technischem Update

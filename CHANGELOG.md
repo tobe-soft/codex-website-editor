@@ -1,5 +1,12 @@
 # Änderungen
 
+## Dokumentation – 31.10.2026
+
+- Aufgabenverteilung festgelegt: Codex für Design/Aufbau/Funktionen, Editor für laufende Pflege.
+- Kurzanleitung, Herkunftsvergleich und sichtbare Würdigung von David (david-loe) ergänzt.
+- Vorgaben für Bearbeitbarkeit, stabile IDs und individuelle Erweiterungen präzisiert.
+- Keine Änderung am Editor-Core oder Datenformat.
+
 ## 0.5.0 – 30.10.2026
 
 - Core 1.4.0: Verwaltung mit Bereichen Seiten, Gestaltung, Sicherung und Zugang.

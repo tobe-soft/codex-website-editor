@@ -1,6 +1,8 @@
 # Codex Website Editor
 
 Zuerst PROJECT-BRIEF.md lesen. Nur in diesem eigenen Arbeitsordner entwickeln.
+Anwendungskonzept und kurze Nutzeranleitung: docs/KURZANLEITUNG.md.
+Herkunft und Abgleich mit dem Ursprungsprojekt: docs/HERKUNFT-UND-KONZEPT.md.
 Die bisherige Kundenwebsite und deren Webspace nicht verändern oder als Testziel
 verwenden. Lokale Herkunftshinweise stehen unter .local/SOURCE.md und gehören
 nicht auf GitHub.
@@ -19,16 +21,47 @@ Node-Server auf dem Webspace. Für Texte, Bilder und Links dauerhafte IDs nutzen
 Seitenname, Menübeschriftung und Titel verknüpfen. Haupt-/Footermenü unabhängig.
 Bestehende Installationen mit Backup aktualisieren, niemals den Webspace leeren.
 
+Die Website schnell, responsiv und barrierearm halten. Semantisches HTML,
+sinnvolle Überschriften, Bildbeschreibungen und einfache Komponenten bevorzugen.
+Sichtbare Texte standardmäßig deutsch halten, sofern nichts anderes gewünscht.
+
 Vor Abschluss npm run check und npm run build sowie passende funktionale
 PHP-/Browser- und Migrationstests ausführen. Neue allgemeine Funktionen zuerst
 hier prüfen, bevor ein Kundenprojekt aktualisiert wird.
 
-Die feste Drei-Seiten-Testwebsite ist zurückgestellt. Erste Designentscheidungen
-im neuen Chat klären. GitHub-Veröffentlichung ist das Projektziel; vorher Konto,
-Repositorynamen, Sichtbarkeit und Lizenz-/Herkunftshinweise konkret prüfen.
+Erste Designentscheidungen im neuen Websiteprojekt klären. Bei neuen GitHub-Zielen
+Konto, Repositorynamen und Sichtbarkeit klären; bestätigte Angaben nicht erneut
+erfragen. Herkunftsverweise auf david-loe/codex-website und Lizenz erhalten.
 Keine öffentliche Quellcode-ZIP-Datei in Kundenwebsites erzeugen.
 
 ## Neue Websites mit dieser Vorlage
+
+### Codex gestaltet, der Editor pflegt
+
+Grundlegende Gestaltung, Seitenaufbau, neue Inhaltsbereiche, Animationen und
+zusätzliche Funktionen auf Nutzerauftrag über Codex umsetzen. Die vorhandenen
+Editorfunktionen begrenzen nicht die Gestaltungsmöglichkeiten.
+
+Alltägliche Inhalte müssen weiterhin ohne Codeänderung pflegbar sein: Texte,
+Bilder/Logo und Links an die vorhandenen Editor-Schnittstellen mit stabilen IDs
+anbinden. Navigation, Textrollen und vorhandene Farbkonzepte berücksichtigen.
+Eine Animation kann im Code festgelegt sein, während ihr Text/Bild editierbar
+bleibt. Zusätzliche Editor-Einstellungen nur bei Bedarf für die laufende Pflege
+ergänzen. Einen klar beauftragten festen Effekt ohne erneute Grundsatzfrage bauen.
+
+Wenn der benötigte Pflegeumfang unklar ist oder eine Funktion nicht im Editor
+verfügbar sein wird, dies vor der Umsetzung konkret erläutern und nur die offene
+Entscheidung klären. Keine Bearbeitbarkeit versprechen, die nicht implementiert
+ist. Neue Seitentypen/Layouts über Codex entwickeln; der Editor erstellt Seiten
+auf Grundlage des vorhandenen Seitentemplates.
+
+Vor einem Umbau gespeicherte Editor-Anpassungen berücksichtigen. IDs nicht aus
+neuen Texten ableiten oder still ersetzen; nötige Änderungen gezielt migrieren.
+Individuelles Design in der Website, allgemeine Editor-Erweiterungen im
+versionierten Core halten. Nach Änderungen die Pflegefähigkeit der betroffenen
+Texte, Bilder und Links sowie Navigation und mobile Darstellung prüfen.
+
+### Start und Veröffentlichung
 
 Beim Start zwei Wege anbieten: Referenzwebsite oder neutrale Standardgestaltung.
 Zweck, Inhalte, Seiten und Gestaltung kurz klären und dann umsetzen. Die jetzigen
